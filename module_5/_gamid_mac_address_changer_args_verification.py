@@ -30,7 +30,7 @@ interfaces_list = ['lo', 'eth0', 'eth1', 'docker0']
 
 
 def is_valid_mac(str) :
-    # regural expression
+    # regular expression
     regex = (
             "^([0-9A-Fa-f]{2}[:-])" + "{5}([0-9A-Fa-f]{2})|" + "([0-9a-fA-F]{4}\\." + "[0-9a-fA-F]{4}\\." + "[0-9a-fA-F]{4})$")
     match = re.compile(regex)

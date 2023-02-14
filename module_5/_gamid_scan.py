@@ -1,3 +1,5 @@
+# запуск программы производится из терминала:
+# % sudo python3 _gamid_scan.py
 import scapy.all as scapy
 import argparse
 
@@ -13,7 +15,7 @@ scapy.arping(ip)
 
 # *******************************************************************************ip
 # Результат:
-# (pythonProject3.9) alexandrganitev@Alexandrs-MBP module_5 % sudo python3 _gamid_scan.py
+# ... module_5 % sudo python3 _gamid_scan.py
 # Password:
 # WARNING: No IPv4 address found on en5 !
 # WARNING: No IPv4 address found on ap1 !
