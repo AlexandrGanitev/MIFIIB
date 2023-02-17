@@ -13,6 +13,21 @@ packet = broadcast/arp_req
 # this part doesn't work (sending the packages)
 good, bad = scapy.srp(packet, timeout=1)
 print(good.summary())
+print('*' * 25)
+# !!! I have found the result finally. After fighting with installing different versions of python, scapy, launching
+# scapy from the root, using sudo I found it. Scapy was installed in PyCharm, the side (terminal) installations
+# # didn't help. All I needed to do was to run the script using the correct version of python:
+#  sudo python3.9 _gamid_scan_ARP_v1.py -i 10.0.2.0/24
+# Begin emission:
+# Finished sending 256 packets.
+# ***
+# Received 3 packets, got 3 answers, remaining 253 packets
+# Ether / ARP who has 10.0.2.2 says 10.0.2.16 ==> Ether / ARP is at 52:54:00:12:35:02 says 10.0.2.2 / Padding
+# Ether / ARP who has 10.0.2.3 says 10.0.2.16 ==> Ether / ARP is at 52:54:00:12:35:03 says 10.0.2.3 / Padding
+# Ether / ARP who has 10.0.2.4 says 10.0.2.16 ==> Ether / ARP is at 52:54:00:12:35:04 says 10.0.2.4 / Padding
+
+# Network 10.0.2.0 - NAT
+# Network 192.168.56.0 - VirtualNetwork
 
 #  module_5 % sudo python3 _gamid_scan_ARP_v1.py -i 192.168.1.0/24
 # WARNING: No IPv4 address found on en5 !
