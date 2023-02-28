@@ -10,10 +10,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument(name or flags...[, action][, nargs][, const]
                     [, default][, type][, choices][, required]
                     [, help][, metavar][, dest])"""
-existing_IP_addresses = []
+scanned_IP_addresses = []
+
 
 def do_ping_sweep(ip, num_of_host) :
-    global existing_IP_addresses
+    global scanned_IP_addresses
     ip_parts = ip.split('.')
     network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
     scanned_ip = network_ip + str(int(ip_parts[3]) + num_of_host)
@@ -21,40 +22,23 @@ def do_ping_sweep(ip, num_of_host) :
     # w - Устанавливает время ожидания (если есть необходимость в использовании
     response = os.popen(f'ping -c 1 {scanned_ip}')
     res = response.readlines()
-    print("Full output of ping: ",res,)
-    # всего вывод res состоит из 4 строк:
-    # ['PING 192.168.1.156 (192.168.1.156): 56 data bytes\n',
-    # '\n',
-    # '--- 192.168.1.156 ping statistics ---\n',
-    # '1 packets transmitted, 0 packets received, 100.0% packet loss\n']
+    print("Full output of ping:\n", res)
     print(f"[#] Result of scanning {scanned_ip}\n{res[0]}\n{res[2]}\n{res[3]}", end='\n\n')
-    # ls = ['Hello from AskPython', 'Hello', 'Hello boy!', 'Hi']
-    #
-    # if any("AskPython" in word for word in ls) :
-    #     print('\'AskPython\' is there inside the list!')
-    # else :
-    #     print('\'AskPython\' is not there inside the list')
-# здесь что-то с логикой фильтрации адресов
-    if any("Request timeout" or "100.0%" in word for word in res):
-        print(f'This IP is not on the network')
-        existing_IP_addresses += [scanned_ip]
-        print('List of existing IP addresses:', existing_IP_addresses)
-    elif any("round-trip" in word for word in res):
-        print(f'This IP belongs to the network')
+    # выводим список просканированных адресов
+    scanned_IP_addresses += [scanned_ip]
+    print('List of scanned IP addresses: ', scanned_IP_addresses)
 
 
-
-
-def sent_http_request(target, method, headers=None, payload=None):
+def sent_http_request(target, method, headers=None, payload=None) :
     headers_dict = dict()
-    if headers:
-        for header in headers:
+    if headers :
+        for header in headers :
             header_name = header.split(':')[0]
-            header_value = header.split(':')[1:]
+            header_value = header.split(':')[1 :]
             headers_dict[header_name] = ':'.join(header_value)
-    if method == "GET":
+    if method == "GET" :
         response = requests.get(target, headers=headers_dict)
-    elif method == "POST":
+    elif method == "POST" :
         response = requests.post(target, headers=headers_dict, data=payload)
     print(
         f"[#] Response status code: {response.status_code}\n"
@@ -77,11 +61,11 @@ args = parser.parse_args()
 if args.task == 'scan' :
     for host_num in range(args.num_of_hosts) :
         do_ping_sweep(args.ip, host_num)
-else:
+else :
     sent_http_request(args.target, args.method, args.headers, args.payload)
 
 # ******** All works ********
-# Запуск сканера: python3 network_hosts_scanner.py scan -i 192.168.1.1 -n 10
+# Запуск сканера: python3 _network_hosts_scanner_final.py scan -i 192.168.1.1 -n 10
 #
 # Запупск HTTP запроса: HTTP request to https://google.com:
-# python3 network_hosts_scanner.py sendhttp -t https://google.com -m GET -hd Accept-Language:ru
+# python3 _network_hosts_scanner_final.py sendhttp -t https://google.com -m GET -hd Accept-Language:ru

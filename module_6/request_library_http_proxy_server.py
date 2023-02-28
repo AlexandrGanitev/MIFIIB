@@ -47,7 +47,7 @@ sent_http_request(target, method, headers, payload)
 
 # Target: http://numbersapi.com/
 # Method (GET|POST): GET
-# Headers (name1:value1 name2:value2 ...): 2023/math
+# Headers (name1:value1 name2:value2 ...): 16/math
 
 
 """После того, как код будет запущен, он будет ожидать ввода значений для ряда переменных. 

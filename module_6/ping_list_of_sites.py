@@ -13,7 +13,6 @@ def do_ping_sweep(site_to_ping):
         print(res[line_res]) # здесь res[num] - это одна строка вывода команды ping
 
 
-
 list_of_sites = ['mail.ru','ya.ru', 'google.com', 'skillfactory.ru']
 
 for site in list_of_sites:
