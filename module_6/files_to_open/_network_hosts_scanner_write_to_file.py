@@ -1,5 +1,6 @@
 import os
 import argparse
+from typing import TextIO
 import requests
 import json
 
@@ -22,41 +23,36 @@ def do_ping_sweep(ip, num_of_host) :
     # w - Устанавливает время ожидания (если есть необходимость в использовании
     response = os.popen(f'ping -c 1 {scanned_ip}')
     res = response.readlines()
-    print("Full output of ping: ",res,)
-    # всего вывод списка res состоит из 4 строк:
+    print('\n' + '*' * 70)
+    print("\nFull output of ping: ", res)
+    # всего вывод списка res состоит из 4 строк, негативный пинг:
     # ['PING 192.168.1.156 (192.168.1.156): 56 data bytes\n',
     # '\n',
     # '--- 192.168.1.156 ping statistics ---\n',
     # '1 packets transmitted, 0 packets received, 100.0% packet loss\n']
+    # при успешном пинге, строк будет 5, ищем по паттерну "ttl"
     print(f"[#] Result of scanning {scanned_ip}\n{res[0]}\n{res[2]}\n{res[3]}", end='\n\n')
-    # ls = ['Hello from AskPython', 'Hello', 'Hello boy!', 'Hi']
-    #
-    # if any("AskPython" in word for word in ls) :
-    #     print('\'AskPython\' is there inside the list!')
-    # else :
-    #     print('\'AskPython\' is not there inside the list')
-# здесь что-то с логикой фильтрации адресов
+
     if any("ttl" in word for word in res):
-        print("This IP belongs to the network")
+        print("This IP belongs to the network\n")
         existing_IP_addresses += [scanned_ip]
-        print("List of existing IP addresses:", existing_IP_addresses)
+        print('*' * 70)
     else:
-        print(f"This IP doesn't belong to the network")
+        print(f"This IP doesn't belong to the network\n")
+        print('*' * 70)
+        return existing_IP_addresses
 
 
-print("List of existing IP addresses:", existing_IP_addresses)
-
-
-def sent_http_request(target, method, headers=None, payload=None):
+def sent_http_request(target, method, headers=None, payload=None) :
     headers_dict = dict()
-    if headers:
-        for header in headers:
+    if headers :
+        for header in headers :
             header_name = header.split(':')[0]
-            header_value = header.split(':')[1:]
+            header_value = header.split(':')[1 :]
             headers_dict[header_name] = ':'.join(header_value)
-    if method == "GET":
+    if method == "GET" :
         response = requests.get(target, headers=headers_dict)
-    elif method == "POST":
+    elif method == "POST" :
         response = requests.post(target, headers=headers_dict, data=payload)
     print(
         f"[#] Response status code: {response.status_code}\n"
@@ -79,12 +75,34 @@ args = parser.parse_args()
 if args.task == 'scan' :
     for host_num in range(args.num_of_hosts) :
         do_ping_sweep(args.ip, host_num)
+    print('\t\t\tStatistics:')
+    print("\nList of existing IP addresses:")
+    print(existing_IP_addresses)
+    print('*' * 70 + '\n')
 else:
     sent_http_request(args.target, args.method, args.headers, args.payload)
 
+# Writing to file
+listIP: TextIO
+with open("list_of_IP_addresses.txt", "a") as listIP :
+    # Writing data to a file
+    listIP.write(f"The list of IPs found in this session: \n")
+    for line in existing_IP_addresses :
+        listIP.write(line + '\n')
+        # Optionally, print the data as it is written to the file
+        #print(line)
+    # The file is automatically closed when the 'with' block ends
+    # print('\n')
+    # listIP.writelines(existing_IP_addresses)
+
+# Reading from file
+# with open("myfile.txt", "r+") as listIP :
+#     # Reading form a file
+#     print(listIP.read())
+
 # ******** All works ********
-# Запуск сканера: python3 network_hosts_scanner.py scan -i 192.168.1.1 -n 10
-# или с начала пула сущетвующих адресов:
+# Запуск сканера: python3 _network_hosts_scanner_write_to_file.py scan -i 192.168.1.1 -n 10
+# или с начала пула существующих адресов:
 # python3 network_hosts_scanner.py scan -i 192.168.1.110 -n 140
 # программа составляет список IP адресов, которые дают ответ по паттерну 'ttl'
 # Запуск HTTP запроса: HTTP request to https://google.com:

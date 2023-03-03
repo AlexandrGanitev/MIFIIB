@@ -22,29 +22,21 @@ def do_ping_sweep(ip, num_of_host) :
     # w - Устанавливает время ожидания (если есть необходимость в использовании
     response = os.popen(f'ping -c 1 {scanned_ip}')
     res = response.readlines()
-    print("Full output of ping: ",res,)
+    print("\nFull output of ping: ", res)
     # всего вывод списка res состоит из 4 строк:
     # ['PING 192.168.1.156 (192.168.1.156): 56 data bytes\n',
     # '\n',
     # '--- 192.168.1.156 ping statistics ---\n',
     # '1 packets transmitted, 0 packets received, 100.0% packet loss\n']
     print(f"[#] Result of scanning {scanned_ip}\n{res[0]}\n{res[2]}\n{res[3]}", end='\n\n')
-    # ls = ['Hello from AskPython', 'Hello', 'Hello boy!', 'Hi']
-    #
-    # if any("AskPython" in word for word in ls) :
-    #     print('\'AskPython\' is there inside the list!')
-    # else :
-    #     print('\'AskPython\' is not there inside the list')
-# здесь что-то с логикой фильтрации адресов
+
     if any("ttl" in word for word in res):
-        print("This IP belongs to the network")
+        print("This IP belongs to the network\n")
         existing_IP_addresses += [scanned_ip]
-        print("List of existing IP addresses:", existing_IP_addresses)
+        print('*' * 70)
     else:
-        print(f"This IP doesn't belong to the network")
-
-
-print("List of existing IP addresses:", existing_IP_addresses)
+        print(f"This IP doesn't belong to the network\n")
+        return existing_IP_addresses
 
 
 def sent_http_request(target, method, headers=None, payload=None):
@@ -79,11 +71,16 @@ args = parser.parse_args()
 if args.task == 'scan' :
     for host_num in range(args.num_of_hosts) :
         do_ping_sweep(args.ip, host_num)
+    print('\t\t\tStatistics:')
+    print("\nList of existing IP addresses:")
+    print(existing_IP_addresses)
+    print('*' * 70 + '\n')
 else:
     sent_http_request(args.target, args.method, args.headers, args.payload)
 
+
 # ******** All works ********
-# Запуск сканера: python3 network_hosts_scanner.py scan -i 192.168.1.1 -n 10
+# Запуск сканера: python3 network_hosts_scanner_v1.py scan -i 192.168.1.1 -n 10
 # или с начала пула сущетвующих адресов:
 # python3 network_hosts_scanner.py scan -i 192.168.1.110 -n 140
 # программа составляет список IP адресов, которые дают ответ по паттерну 'ttl'
