@@ -1,1 +1,1 @@
-Hear is my testing git txt file.
+Here is my testing git txt file. Version 2. 
