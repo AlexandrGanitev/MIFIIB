@@ -1,5 +1,0 @@
-print('*' * 65)
-print("Good Day, that's my first commit to Git from the local PC")
-print('*' * 65)
-print('Testing the commit, attempt N2')
-print('*' * 65)
