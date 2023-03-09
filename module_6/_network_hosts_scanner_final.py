@@ -98,5 +98,5 @@ with open("list_of_IP_addresses.txt", "a") as listIP :
 # python3 network_hosts_scanner.py scan -i 192.168.1.110 -n 140
 # программа составляет список IP адресов, которые дают ответ по паттерну 'ttl'
 # Запуск HTTP запроса: HTTP request to https://google.com:
-# python3 network_hosts_scanner.py sendhttp -t https://google.com -m GET -hd Accept-Language:ru
+# python3 _network_hosts_scanner_final.py sendhttp -t https://google.com -m GET -hd Accept-Language:ru
 
