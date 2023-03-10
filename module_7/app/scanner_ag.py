@@ -32,8 +32,9 @@ def do_ping_sweep(ip, num_of_host) :
     # '1 packets transmitted, 0 packets received, 100.0% packet loss\n']
     # при успешном пинге, строк будет 5, ищем по паттерну "ttl"
     print(f"[#] Result of scanning {scanned_ip}\n{res[0]}\n{res[2]}\n{res[3]}", end='\n\n')
-
-    if any("ttl=" or "TTL=" in word for word in res):
+    # починил! здесь надо разделять условные операторы используя any
+    # важно: для пинга телефона, в оный нужно залогиниться, чтобы был успешный пинг
+    if any(("ttl=" in word for word in res) or ("TTL=" in word for word in res)):
         print("This IP belongs to the network\n")
         existing_IP_addresses += [scanned_ip]
         print('*' * 70)
