@@ -1,5 +1,75 @@
 # coding=utf-8
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import os
+import requests
+import json
+import argparse
+
+existing_IP_addresses = []
+
+
+def do_ping_sweep(ip, num_of_host) :
+    global existing_IP_addresses
+    ip_parts = ip.split('.')
+    network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
+    scanned_ip = network_ip + str(int(ip_parts[3]) + num_of_host)
+    # c – Количество отправляемых пакетов, устанавливаем = 1, если больше, то будет больше строк вывода
+    # w - Устанавливает время ожидания (если есть необходимость в использовании
+    response = os.popen(f'ping -c 1 {scanned_ip}')
+    res = response.readlines()
+    print('\n' + '*' * 70)
+    print("\nFull output of ping: ", res)
+    print(f"[#] Result of scanning {scanned_ip}\n{res[0]}\n{res[2]}\n{res[3]}", end='\n\n')
+    # починил! здесь надо разделять условные операторы используя any
+    # важно: для пинга телефона, в оный нужно залогиниться, чтобы был успешный пинг
+    if any(("ttl=" in word for word in res) or ("TTL=" in word for word in res)):
+        print("This IP belongs to the network\n")
+        existing_IP_addresses += [scanned_ip]
+        print('*' * 70)
+    else:
+        print(f"This IP doesn't belong to the network\n")
+        print('*' * 70)
+        return existing_IP_addresses
+
+
+def send_http_request(target, method, headers=None, payload=None) :
+    headers_dict = dict()
+    if headers :
+        for header in headers :
+            header_name = header.split(':')[0]
+            header_value = header.split(':')[1 :]
+            headers_dict[header_name] = ':'.join(header_value)
+    if method == "GET" :
+        response = requests.get(target, headers=headers_dict)
+    elif method == "POST" :
+        response = requests.post(target, headers=headers_dict, data=payload)
+    print(
+        f"[#] Response status code: {response.status_code}\n"
+        f"[#] Response headers: {json.dumps(dict(response.headers), indent=4, sort_keys=True)}\n"
+        f"[#] Response content:\n {response.text}"
+    )
+
+
+parser = argparse.ArgumentParser(description='Network scanner')
+parser.add_argument('task', choices=['scan', 'sendhttp'], help='Network scan or send HTTP request')
+parser.add_argument('-i', '--ip', type=str, help='IP address')
+parser.add_argument('-n', '--num_of_hosts', type=int, help='Number of hosts')
+parser.add_argument('-t', '--target', type=str, help='Target for http requests')
+parser.add_argument('-m', '--method', choices=['GET', 'POST'], help='GET or POST method')
+parser.add_argument('-hd', '--headers', nargs='*', type=str, help='Request headers')
+parser.add_argument('-p', '--payload', type=str, help='Request headers')
+
+args = parser.parse_args()
+
+if args.task == 'scan' :
+    for host_num in range(args.num_of_hosts) :
+        do_ping_sweep(args.ip, host_num)
+    print('\t\t\tStatistics:')
+    print("\nList of existing IP addresses:")
+    print(existing_IP_addresses)
+    print('*' * 70 + '\n')
+else:
+    send_http_request(args.target, args.method, args.headers, args.payload)
 
 
 # Обработка запросов
@@ -15,48 +85,17 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         return temp
 
     # Обрабатываем GET запросы
-    def do_GET(self) :
+    def do_PING(self) :
         temp = self.set_headers()
-        global existing_IP_addresses
-        ip_parts = ip.split('.')
-        network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
-        scanned_ip = network_ip + str(int(ip_parts[3]) + num_of_host)
-        # c – Количество отправляемых пакетов, устанавливаем = 1, если больше, то будет больше строк вывода
-        # w - Устанавливает время ожидания (если есть необходимость в использовании
-        response = os.popen(f'ping -c 1 {scanned_ip}')
-        res = response.readlines()
-        print('\n' + '*' * 70)
-        print("\nFull output of ping: ", res)
-        print(f"[#] Result of scanning {scanned_ip}\n{res[0]}\n{res[2]}\n{res[3]}", end='\n\n')
-        # починил! здесь надо разделять условные операторы используя any
-        # важно: для пинга телефона, в оный нужно залогиниться, чтобы был успешный пинг
-        if any(("ttl=" in word for word in res) or ("TTL=" in word for word in res)) :
-            print("This IP belongs to the network\n")
-            existing_IP_addresses += [scanned_ip]
-            print('*' * 70)
-        else :
-            print(f"This IP doesn't belong to the network\n")
-            print('*' * 70)
-            return existing_IP_addresses
+        ping_list = do_ping_sweep(ip="192.168.1.115", num_of_host=5)
+        self.wfile.write(f"Complete! Squared number is: {ping_list}")
 
     # Обрабатываем POST запросы
     def do_POST(self) :
         temp = self.set_headers()
-        headers_dict = dict()
-        if headers :
-            for header in headers :
-                header_name = header.split(':')[0]
-                header_value = header.split(':')[1 :]
-                headers_dict[header_name] = ':'.join(header_value)
-        if method == "GET" :
-            response = requests.get(target, headers=headers_dict)
-        elif method == "POST" :
-            response = requests.post(target, headers=headers_dict, data=payload)
-        print(
-            f"[#] Response status code: {response.status_code}\n"
-            f"[#] Response headers: {json.dumps(dict(response.headers), indent=4, sort_keys=True)}\n"
-            f"[#] Response content:\n {response.text}"
-        )
+        numberx2 = number_plus(int(temp))
+        # Если получаем POST запрос, то удваиваем полученное число
+        self.wfile.write((f"Complete! Doubled number is: {numberx2}").encode())
 
 
 # Запускаем HTTP сервер
