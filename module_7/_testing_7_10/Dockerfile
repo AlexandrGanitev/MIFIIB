@@ -7,4 +7,4 @@ COPY ./app /code/requirements
 RUN pip install --no-cache-dir /code/requirement.txt
 EXPOSE 3009
 ENTRYPOINT ["python"]
-CMD ["./scanner_ag.py", "main.py"]
+CMD ["main.py"]
