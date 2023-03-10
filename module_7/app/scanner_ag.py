@@ -33,7 +33,7 @@ def do_ping_sweep(ip, num_of_host) :
     # при успешном пинге, строк будет 5, ищем по паттерну "ttl"
     print(f"[#] Result of scanning {scanned_ip}\n{res[0]}\n{res[2]}\n{res[3]}", end='\n\n')
 
-    if any("ttl" or "TTL" in word for word in res):
+    if any("ttl=" or "TTL=" in word for word in res):
         print("This IP belongs to the network\n")
         existing_IP_addresses += [scanned_ip]
         print('*' * 70)
@@ -82,20 +82,8 @@ if args.task == 'scan' :
 else:
     sent_http_request(args.target, args.method, args.headers, args.payload)
 
-# Writing to file
-listIP: TextIO
-# using "a" as parameter to append and write to the file. If the file doesn't exist - it's being created
-with open("list_of_IP_addresses.txt", "a") as listIP :
-    # Writing data to a file
-    listIP.write(f"The list of IPs found in this session: \n")
-    for line in existing_IP_addresses :
-        listIP.write(line + '\n')
-
-
-# ******** All works ********
-# Запуск сканера: python3 _network_hosts_scanner_final.py scan -i 192.168.1.1 -n 10
-# или с начала пула существующих адресов:
-# python3 _network_hosts_scanner_final.py scan -i 192.168.1.110 -n 140
+# ******** Scan and HTTP requests work ********
+# Запуск сканера: python3 scanner_ag.py scan -i 192.168.1.1 -n 10
 # программа составляет список IP адресов, которые дают ответ по паттерну 'ttl'
 # Запуск HTTP запроса: HTTP request to https://google.com:
 # python3 _network_hosts_scanner_final.py sendhttp -t https://google.com -m GET -hd Accept-Language:ru
