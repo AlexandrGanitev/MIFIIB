@@ -6,4 +6,5 @@ COPY ./app /code/requirements
 # folder /code belongs to the inner structure of this Docker container
 RUN pip install --no-cache-dir /code/requirement.txt
 EXPOSE 3009
-ENTRYPOINT ["python", "./sanner_ag.py"]
+ENTRYPOINT ["python"]
+CMD ["./scanner_ag.py"]

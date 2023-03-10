@@ -45,5 +45,3 @@ def sent_http_request(target, method, headers=None, payload=None) :
         f"[#] Response headers: {json.dumps(dict(response.headers), indent=4, sort_keys=True)}\n"
         f"[#] Response content:\n {response.text}"
     )
-
-
