@@ -1,30 +1,4 @@
-# from fastapi import FastAPI, APIRouter
-# import app.scanner_ag_test
-#
-# router = APIRouter()
-#
-#
-# @router.get("/scan")
-# def do_ping(ip: str, num_of_hosts: int) :
-#     for host_num in range(num_of_hosts) :
-#         app.do_ping_sweep(ip, host_num)
-#     print('\t\t\tStatistics:')
-#     print("\nList of existing IP addresses:")
-#     print(app.scanner_ag_test.existing_IP_addresses)
-#     print('*' * 70 + '\n')
-#     return app.scanner_ag_test.existing_IP_addresses
-#
-#
-# @router.get("/sendhttp")
-# def do_send_http(target: str, method: str, headers=None, payload=None) :
-#     app.send_http_request(target, method, headers, payload)
-#
-#
-# appl = FastAPI()
-# appl.include_router(router)
-
 from typing import Union
-
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -38,3 +12,10 @@ def read_root():
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
+
+# The program is launched this way:
+# 1. In PyCharm's terminal navigate to _testing_7_10
+# 2. Enter: uvicorn app.main:app (here app is the folder with our script)
+# 3. Open the browser from the terminal's output i.e.
+# Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+# 4. See the result in the browser
