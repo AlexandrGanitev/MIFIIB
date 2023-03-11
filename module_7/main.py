@@ -3,7 +3,6 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import os
 import requests
 import json
-import argparse
 
 existing_IP_addresses = []
 
@@ -22,11 +21,11 @@ def do_ping_sweep(ip, num_of_host) :
     print(f"[#] Result of scanning {scanned_ip}\n{res[0]}\n{res[2]}\n{res[3]}", end='\n\n')
     # починил! здесь надо разделять условные операторы используя any
     # важно: для пинга телефона, в оный нужно залогиниться, чтобы был успешный пинг
-    if any(("ttl=" in word for word in res) or ("TTL=" in word for word in res)):
+    if any(("ttl=" in word for word in res) or ("TTL=" in word for word in res)) :
         print("This IP belongs to the network\n")
         existing_IP_addresses += [scanned_ip]
         print('*' * 70)
-    else:
+    else :
         print(f"This IP doesn't belong to the network\n")
         print('*' * 70)
         return existing_IP_addresses
@@ -50,28 +49,6 @@ def send_http_request(target, method, headers=None, payload=None) :
     )
 
 
-parser = argparse.ArgumentParser(description='Network scanner')
-parser.add_argument('task', choices=['scan', 'sendhttp'], help='Network scan or send HTTP request')
-parser.add_argument('-i', '--ip', type=str, help='IP address')
-parser.add_argument('-n', '--num_of_hosts', type=int, help='Number of hosts')
-parser.add_argument('-t', '--target', type=str, help='Target for http requests')
-parser.add_argument('-m', '--method', choices=['GET', 'POST'], help='GET or POST method')
-parser.add_argument('-hd', '--headers', nargs='*', type=str, help='Request headers')
-parser.add_argument('-p', '--payload', type=str, help='Request headers')
-
-args = parser.parse_args()
-
-if args.task == 'scan' :
-    for host_num in range(args.num_of_hosts) :
-        do_ping_sweep(args.ip, host_num)
-    print('\t\t\tStatistics:')
-    print("\nList of existing IP addresses:")
-    print(existing_IP_addresses)
-    print('*' * 70 + '\n')
-else:
-    send_http_request(args.target, args.method, args.headers, args.payload)
-
-
 # Обработка запросов
 class ServiceHandler(BaseHTTPRequestHandler) :
     # Устанавливаем параметры заголовков для ответа
@@ -85,17 +62,23 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         return temp
 
     # Обрабатываем GET запросы
-    def do_PING(self) :
+    def do_GET(self) :
         temp = self.set_headers()
+        print(temp)
+        # передаём стартовый IP и количество хостов для пинга
         ping_list = do_ping_sweep(ip="192.168.1.115", num_of_host=5)
-        self.wfile.write(f"Complete! Squared number is: {ping_list}")
+        self.wfile.write(f"The list of successfully pinged IP addresses: {ping_list}")
+
+    # Обрабатываем GET запросы
+    # У нас три задачи: ping sweep и GET/POST. Тогда надо реализовать три функции:
+    # do_PING, do_GET, do_POST?
 
     # Обрабатываем POST запросы
     def do_POST(self) :
         temp = self.set_headers()
-        numberx2 = number_plus(int(temp))
-        # Если получаем POST запрос, то удваиваем полученное число
-        self.wfile.write((f"Complete! Doubled number is: {numberx2}").encode())
+        print(temp)
+        # Если получаем POST запрос:
+        # self.wfile.write((f"Complete! Doubled number is: {numberx2}").encode())
 
 
 # Запускаем HTTP сервер
