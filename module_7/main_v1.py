@@ -82,3 +82,9 @@ class ServiceHandler(BaseHTTPRequestHandler) :
 # Запускаем HTTP сервер
 server = HTTPServer(('0.0.0.0', 3009), ServiceHandler)
 server.serve_forever()
+# вызвал сервер командой:
+# python -m http.server
+# ответ:
+# Serving HTTP on :: port 8000 (http://[::]:8000/) ...
+# надо разобраться, как передавать GET запрос через Postman. Оригинальная программа работала так:
+# python3 _network_hosts_scanner_final.py scan -i 192.168.1.1 -n 10
