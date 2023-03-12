@@ -73,15 +73,19 @@ class ServiceHandler(BaseHTTPRequestHandler) :
 
     # Обрабатываем GET запросы
     def do_GET(self) :
-        temp = self._set_headers()
+        temp = self.set_headers()
         self.send_response(200)
         self.send_header("Content-type", "text/json")
         self.end_headers()
         ip_parts = temp.split('.')
         network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
-        ping = "ping -c 1 "
+        ping = "ping -c 1"
         time1 = datetime.datetime.now()
-        for ip in range(int(ip_parts[3]), int(ip_parts[3])+2) :
+        for ip in range(0, 2): # так отрабатывает, ниже вариант даёт ошибку:
+            #     for ip in range(int(ip_parts[3]), int(ip_parts[3])+int(5)) :
+            #                     ^^^^^^^^^^^^^^^^
+            # ValueError: invalid literal for int() with base 10: '1\\n\\n'
+        # for ip in range(int(ip_parts[3]), int(ip_parts[3])+int(5)) :
             addr = network_ip + str(ip)
             print(addr)
             command = ping + addr
@@ -101,7 +105,8 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         temp = self.set_headers()
         print(temp)
         # Если получаем POST запрос:
-        # self.wfile.write((f"Complete! Doubled number is: {numberx2}").encode())
+        http_request_response = send_http_request("https://ya.ru", "GET", "Server", "HTTP")
+        self.wfile.write(f"Complete! Doubled number is: {http_request_response}".encode())
 
 
 # Запускаем HTTP сервер
