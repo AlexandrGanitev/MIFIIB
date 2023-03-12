@@ -13,7 +13,6 @@ def do_ping_sweep(ip, num_of_host) :
     network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
     scanned_ip = network_ip + str(int(ip_parts[3]) + num_of_host)
     # c – Количество отправляемых пакетов, устанавливаем = 1, если больше, то будет больше строк вывода
-    # w - Устанавливает время ожидания (если есть необходимость в использовании
     response = os.popen(f'ping -c 1 {scanned_ip}')
     res = response.readlines()
     print('\n' + '*' * 70)
@@ -66,12 +65,8 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         temp = self.set_headers()
         print(temp)
         # передаём стартовый IP и количество хостов для пинга
-        ping_list = do_ping_sweep(ip="192.168.1.115", num_of_host=5)
-        self.wfile.write(f"The list of successfully pinged IP addresses: {ping_list}")
-
-    # Обрабатываем GET запросы
-    # У нас три задачи: ping sweep и GET/POST. Тогда надо реализовать три функции:
-    # do_PING, do_GET, do_POST?
+        ping_list = do_ping_sweep(ip="192.168.1.1", num_of_host=5)
+        self.wfile.write(f"The list of successfully pinged IP addresses: {ping_list}".encode())
 
     # Обрабатываем POST запросы
     def do_POST(self) :

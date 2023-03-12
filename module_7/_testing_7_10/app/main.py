@@ -5,13 +5,13 @@ app = FastAPI()
 
 
 @app.get("/")
-def read_root():
-    return {"Привет": "От Александра"}
+def read_root() :
+    return {"Привет" : "От Александра"}
 
 
 @app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+def read_item(item_id: int, q: Union[str, None] = None) :
+    return {"item_id" : item_id, "q" : q}
 
 # The program is launched this way:
 # 1. In PyCharm's terminal navigate to _testing_7_10
