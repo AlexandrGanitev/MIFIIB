@@ -115,10 +115,7 @@ def do_GET(self):
 Константин З.
   5 hours ago
 Пример запроса и ответа из Postman:
-image.png
-
-image.png
-
+см. img.png
 
 Константин З.
   5 hours ago
