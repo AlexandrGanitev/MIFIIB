@@ -74,7 +74,7 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         temp = self.set_headers()
         print(temp)
         # передаём стартовый IP и количество хостов для пинга
-        ping_list = do_ping_sweep(ip="192.168.1.1", num_of_host=5)
+        ping_list = do_ping_sweep(ip="192.168.1.1", num_scanned_hosts="5")
         self.wfile.write(f"The list of successfully pinged IP addresses: {ping_list}".encode())
 
     # Обрабатываем POST запросы
@@ -96,3 +96,6 @@ server.serve_forever()
 # Serving HTTP on :: port 8000 (http://[::]:8000/) ...
 # надо разобраться, как передавать GET запрос через Postman. Оригинальная программа работала так:
 # python3 main.py scan -i 192.168.1.1 -n 10
+
+# попытался запустить без HTTPсервера сам скрипт, но без argparse,
+# я не понимаю, как передать аргументы. Исследую.
