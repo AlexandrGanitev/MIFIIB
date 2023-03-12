@@ -56,6 +56,9 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         self.send_header("Content-type", "text/json")
         length = int(self.headers["Content-Length"])
         content = self.rfile.read(length)
+        # The b literal in front of the string literal means that the given string is in bytes' format.
+        # The b literal converts string into byte format. In this format bytes are actual data and string
+        # is an abstraction.
         temp = str(content).strip('b\'')
         self.end_headers()
         return temp
