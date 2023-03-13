@@ -67,7 +67,7 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         # The b literal in front of the string literal means that the given string is in bytes' format.
         # The b literal converts string into byte format. In this format bytes are actual data and string
         # is an abstraction.
-        temp = str(content).strip('b\'')
+        temp = str(content).strip("'b\''")
         self.end_headers()
         return temp
 
@@ -78,17 +78,20 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         self.send_header("Content-type", "text/json")
         self.end_headers()
         ip_parts = temp.split('.')
+        # пришлосъ пойти на такую хитрость с replace(), терерь сканер работает! '\\n' был удалён из 4-го октета.
+        ip_parts[3] = ip_parts[3].replace('\\n', '')
+        print(ip_parts[3])
         network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
         ping = "ping -c 1 "
         time1 = datetime.datetime.now()
-        for ip in range(115, 118) :  # так отрабатывает, ниже вариант даёт ошибку:
+        # for ip in range(115, 118) :  # так отрабатывает, ниже вариант даёт ошибку:
             #     for ip in range(int(ip_parts[3]), int(ip_parts[3])+int(5)) :
             #                     ^^^^^^^^^^^^^^^^
             # ValueError: invalid literal for int() with base 10: '1\\n\\n'
             # проблема связана со строкой выше: content = self.rfile.read(length), где добаляюся символы 'b', \n.
             # надо их удалить, работаю...
 
-            # for ip in range(int(ip_parts[3]), int(ip_parts[3]) + 3) :
+        for ip in range(int(ip_parts[3]), int(ip_parts[3]) + 3) :
             addr = network_ip + str(ip)
             print(addr)
             command = ping + addr
@@ -134,7 +137,7 @@ server.serve_forever()
 # хотелось бы передавать в запросе GET. Разбираюсь.
 
 """
-$ python3 main.py
+$ python3 main_first_dockerized.py
 127.0.0.1 - - [12/Mar/2023 23:56:45] "GET /?ip=192.168.1.115&num_scanned_hosts=5 HTTP/1.1" 200 -
 192.168.1.115
 

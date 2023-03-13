@@ -3,6 +3,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import os
 import requests
 import json
+import datetime
 
 existing_IP_addresses = []
 
@@ -73,11 +74,31 @@ class ServiceHandler(BaseHTTPRequestHandler) :
     # Обрабатываем GET запросы
     def do_GET(self) :
         temp = self.set_headers()
-        print(temp)
-        # передаём стартовый IP и количество хостов для пинга
-        # Несмотря на то, что IP закодирован ниже, введённый адрес выводиться в консоли, т.е. он передаётся из Postman в программу
-        ping_list = do_ping_sweep("192.168.1.223", 2)
-        self.wfile.write(f"Successfully pinged IP addresses: {ping_list}".encode())
+        self.send_response(200)
+        self.send_header("Content-type", "text/json")
+        self.end_headers()
+        ip_parts = temp.split('.')
+        network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
+        ping = "ping -c 1 "
+        time1 = datetime.datetime.now()
+        # for ip in range(115, 118): # так отрабатывает, ниже вариант даёт ошибку:
+            #     for ip in range(int(ip_parts[3]), int(ip_parts[3])+int(5)) :
+            #                     ^^^^^^^^^^^^^^^^
+            # ValueError: invalid literal for int() with base 10: '1\\n\\n'
+        for ip in range(int(ip_parts[3]), int(ip_parts[3]) + 3) :
+            addr = network_ip + str(ip)
+            print(addr)
+            command = ping + addr
+            response = os.popen(command)
+            res = response.readlines()
+
+            for line in res :
+                if line.count("ttl") :
+                    self.wfile.write(("\n" + addr + "----- LIVE\n").encode())
+
+        time2 = datetime.datetime.now()
+        total_time = time2 - time1
+        self.wfile.write(f"Complete! in {total_time}".encode())
 
     # Обрабатываем POST запросы
     def do_POST(self) :
@@ -105,7 +126,7 @@ server.serve_forever()
 # хотелось бы передавать в запросе GET. Разбираюсь.
 
 """
-$ python3 main.py
+$ python3 main_first_dockerized.py
 127.0.0.1 - - [12/Mar/2023 23:56:45] "GET /?ip=192.168.1.115&num_scanned_hosts=5 HTTP/1.1" 200 -
 192.168.1.115
 
@@ -141,6 +162,3 @@ This IP belongs to the network
 ['192.168.1.116']
 
 """
-
-# POST запрос на API:
-# {"method": "GET", "url":"https://ya.ru"}

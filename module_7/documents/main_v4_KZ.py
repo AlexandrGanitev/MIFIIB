@@ -126,7 +126,7 @@ server.serve_forever()
 # хотелось бы передавать в запросе GET. Разбираюсь.
 
 """
-$ python3 main.py
+$ python3 main_first_dockerized.py
 127.0.0.1 - - [12/Mar/2023 23:56:45] "GET /?ip=192.168.1.115&num_scanned_hosts=5 HTTP/1.1" 200 -
 192.168.1.115
 

@@ -9,5 +9,5 @@ COPY ./app /code/app
 EXPOSE 3009
 ENTRYPOINT ["python3"]
 CMD ["app/main.py"]
-#CMD ["app/main.py", "--host", "0.0.0.0", "--port", "3009"]
+#CMD ["app/main_first_dockerized.py", "--host", "0.0.0.0", "--port", "3009"]
 

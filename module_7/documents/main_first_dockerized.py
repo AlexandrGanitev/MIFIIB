@@ -74,11 +74,9 @@ class ServiceHandler(BaseHTTPRequestHandler) :
     def do_GET(self) :
         temp = self.set_headers()
         print(temp)
-        # нет, так параметры не передаются в API:
-        your_ip = input("Enter your starting IP: ")
-        num_of_hosts_to_scan = int(input("Enter the number of hosts to scan: "))
         # передаём стартовый IP и количество хостов для пинга
-        ping_list = do_ping_sweep(your_ip, num_of_hosts_to_scan)
+        # Несмотря на то, что IP закодирован ниже, введённый адрес выводиться в консоли, т.е. он передаётся из Postman в программу
+        ping_list = do_ping_sweep("192.168.1.223", 2)
         self.wfile.write(f"Successfully pinged IP addresses: {ping_list}".encode())
 
     # Обрабатываем POST запросы
@@ -86,7 +84,8 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         temp = self.set_headers()
         print(temp)
         # Если получаем POST запрос:
-        # self.wfile.write((f"Complete! Doubled number is: {numberx2}").encode())
+        http_request_response = send_http_request("https://ya.ru", "GET", "Server", "HTTP")
+        self.wfile.write(f"Complete! Doubled number is: {http_request_response}".encode())
 
 
 # Запускаем HTTP сервер
@@ -142,3 +141,6 @@ This IP belongs to the network
 ['192.168.1.116']
 
 """
+
+# POST запрос на API:
+# {"method": "GET", "url":"https://ya.ru"}
