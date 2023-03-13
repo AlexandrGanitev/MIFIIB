@@ -3,7 +3,6 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import os
 import requests
 import json
-import datetime
 
 existing_IP_addresses = []
 
@@ -11,7 +10,7 @@ existing_IP_addresses = []
 def do_ping_sweep(ip, num_scanned_hosts) :
     global existing_IP_addresses
     ip_parts = ip.split('.')
-    for host in range(num_scanned_hosts) :
+    for host in range(num_scanned_hosts):
         network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
         scanned_ip = network_ip + str(int(ip_parts[3]) + host)
         # c – Количество отправляемых пакетов, устанавливаем = 1, если больше, то будет больше строк вывода
@@ -53,7 +52,7 @@ def send_http_request(target: str, method: str = "GET", headers=None, payload=No
         f"[#] Response headers: {json.dumps(dict(response.headers), indent=4, sort_keys=True)}\n"
         f"[#] Response content:\n {response.text}"
     )
-    return {"Status" : response.status_code, "Headers" : json.dumps(dict(response.headers), indent=4, sort_keys=True)}
+    return {"Status": response.status_code, "Headers": json.dumps(dict(response.headers), indent=4, sort_keys=True)}
 
 
 # Обработка запросов
@@ -67,44 +66,18 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         # The b literal in front of the string literal means that the given string is in bytes' format.
         # The b literal converts string into byte format. In this format bytes are actual data and string
         # is an abstraction.
-        temp = str(content).strip("'b\''")
+        temp = str(content).strip('b\'')
         self.end_headers()
         return temp
 
     # Обрабатываем GET запросы
     def do_GET(self) :
         temp = self.set_headers()
-        self.send_response(200)
-        self.send_header("Content-type", "text/json")
-        self.end_headers()
-        ip_parts = temp.split('.')
-        # пришлосъ пойти на такую хитрость с replace(), терерь сканер работает! '\\n' был удалён из 4-го октета.
-        ip_parts[3] = ip_parts[3].replace('\\n', '')
-        print(ip_parts[3])
-        network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
-        ping = "ping -c 1 "
-        time1 = datetime.datetime.now()
-        # for ip in range(115, 118) :  # так отрабатывает, ниже вариант даёт ошибку:
-            #     for ip in range(int(ip_parts[3]), int(ip_parts[3])+int(5)) :
-            #                     ^^^^^^^^^^^^^^^^
-            # ValueError: invalid literal for int() with base 10: '1\\n\\n'
-            # проблема связана со строкой выше: content = self.rfile.read(length), где добаляюся символы 'b', \n.
-            # надо их удалить, работаю...
-
-        for ip in range(int(ip_parts[3]), int(ip_parts[3]) + 3) :
-            addr = network_ip + str(ip)
-            print(addr)
-            command = ping + addr
-            response = os.popen(command)
-            res = response.readlines()
-
-            for line in res :
-                if line.count("ttl") :
-                    self.wfile.write(("\n" + addr + "----- LIVE\n").encode())
-
-        time2 = datetime.datetime.now()
-        total_time = time2 - time1
-        self.wfile.write(f"Complete! in {total_time}".encode())
+        print(temp)
+        # передаём стартовый IP и количество хостов для пинга
+        # Несмотря на то, что IP закодирован ниже, введённый адрес выводиться в консоли, т.е. он передаётся из Postman в программу
+        ping_list = do_ping_sweep("192.168.1.223", 2)
+        self.wfile.write(f"Successfully pinged IP addresses: {ping_list}".encode())
 
     # Обрабатываем POST запросы
     def do_POST(self) :
@@ -118,11 +91,6 @@ class ServiceHandler(BaseHTTPRequestHandler) :
 # Запускаем HTTP сервер
 server = HTTPServer(('0.0.0.0', 3009), ServiceHandler)
 server.serve_forever()
-
-# Обновление, надо убрать доп.символы в переменной Temp:ValueError: invalid literal for int() with base 10: '115\\n'
-# Запуск Debagger-а для такой программы с API:
-# 1. Отмечаем breakpoints, запускаем дебаггер
-# 2. В Postman отправляем запрос и смотрим в окне дебаггера...
 
 # Documentation: https://docs.python.org/3/library/http.server.html
 # вызвал сервер командой:
@@ -173,3 +141,6 @@ This IP belongs to the network
 ['192.168.1.116']
 
 """
+
+# POST запрос на API:
+# {"method": "GET", "url":"https://ya.ru"}
