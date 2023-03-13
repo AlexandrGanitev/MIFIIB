@@ -8,5 +8,5 @@ RUN pip install --no-cache-dir -r requirements.archive
 COPY ./app /code/app
 EXPOSE 3009
 ENTRYPOINT ["python3"]
-CMD ["main.py"]
+CMD ["main_v3.py"]
 #CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
