@@ -12,13 +12,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./app /code/app
 EXPOSE 3009
 ENTRYPOINT ["python3"]
-CMD ["app/main.py", "--host", "0.0.0.0", "--port", "3009"] # здесь надо было именно через / указать путь до main.py
+CMD ["app/main.py"]
+# CMD ["app/main.py", "--host", "0.0.0.0", "--port", "3009"] # здесь надо было именно через / указать путь до main.py
 # во вложенной директории app
 
 Создание Docker image:
 $ module_7 % docker build -t api_scaner .
-Запуск: docker run api_scaner
+# Запуск: docker run api_scaner
 Запуск с привязкой порта: docker run -p 3009:3009 api_scaner
+
 Note: Also make sure your process is listening on host 0.0.0.0 (instead of localhost).
 Container's localhost is not the same as your host's localhost
 
