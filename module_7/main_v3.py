@@ -83,7 +83,8 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         temp = self.set_headers()
         print(temp)
         # Если получаем POST запрос:
-        # self.wfile.write((f"Complete! Doubled number is: {numberx2}").encode())
+        http_request_response = send_http_request("https://ya.ru", "GET", "Server", "HTTP")
+        self.wfile.write(f"Complete! Doubled number is: {http_request_response}".encode())
 
 
 # Запускаем HTTP сервер
@@ -139,3 +140,6 @@ This IP belongs to the network
 ['192.168.1.116']
 
 """
+
+# POST запрос на API:
+# {"method": "GET", "url":"https://ya.ru"}
