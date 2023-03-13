@@ -88,7 +88,7 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         # for ip in range(int(ip_parts[3]), int(ip_parts[3])+int(5)) :
             addr = network_ip + str(ip)
             print(addr)
-            command = ping + addr
+            command = ping + " " + addr
             response = os.popen(command)
             res = response.readlines()
 
