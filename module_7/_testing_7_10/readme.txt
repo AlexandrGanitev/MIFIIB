@@ -1,5 +1,6 @@
 # Built the file with this command: docker build -t api_ag .
 # api_ag is the image name
+# Running: docker run api_ag
 
 # running the container with parameters:
 #  _testing_7_10 % docker run -d --name myapitestingcontainer -p 80:80  api_ag
