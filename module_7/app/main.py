@@ -75,7 +75,8 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         temp = self.set_headers()
         print(temp)
         # передаём стартовый IP и количество хостов для пинга
-        ping_list = do_ping_sweep("192.168.1.115", 2)
+        # Несмотря на то, что IP закодирован ниже, введённый адрес выводиться в консоли, т.е. он передаётся из Postman в программу
+        ping_list = do_ping_sweep("192.168.1.223", 2)
         self.wfile.write(f"Successfully pinged IP addresses: {ping_list}".encode())
 
     # Обрабатываем POST запросы

@@ -11,7 +11,7 @@ existing_IP_addresses = []
 def do_ping_sweep(ip, num_scanned_hosts) :
     global existing_IP_addresses
     ip_parts = ip.split('.')
-    for host in range(num_scanned_hosts):
+    for host in range(num_scanned_hosts) :
         network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
         scanned_ip = network_ip + str(int(ip_parts[3]) + host)
         # c – Количество отправляемых пакетов, устанавливаем = 1, если больше, то будет больше строк вывода
@@ -53,7 +53,7 @@ def send_http_request(target: str, method: str = "GET", headers=None, payload=No
         f"[#] Response headers: {json.dumps(dict(response.headers), indent=4, sort_keys=True)}\n"
         f"[#] Response content:\n {response.text}"
     )
-    return {"Status": response.status_code, "Headers": json.dumps(dict(response.headers), indent=4, sort_keys=True)}
+    return {"Status" : response.status_code, "Headers" : json.dumps(dict(response.headers), indent=4, sort_keys=True)}
 
 
 # Обработка запросов
@@ -81,14 +81,14 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
         ping = "ping -c 1 "
         time1 = datetime.datetime.now()
-        for ip in range(115, 118): # так отрабатывает, ниже вариант даёт ошибку:
+        for ip in range(115, 118) :  # так отрабатывает, ниже вариант даёт ошибку:
             #     for ip in range(int(ip_parts[3]), int(ip_parts[3])+int(5)) :
             #                     ^^^^^^^^^^^^^^^^
             # ValueError: invalid literal for int() with base 10: '1\\n\\n'
-        # проблема связана со строкой выше: content = self.rfile.read(length), где добаляюся символы 'b', \n.
-        # надо их удалить, работаю...
+            # проблема связана со строкой выше: content = self.rfile.read(length), где добаляюся символы 'b', \n.
+            # надо их удалить, работаю...
 
-        # for ip in range(int(ip_parts[3]), int(ip_parts[3]) + 3) :
+            # for ip in range(int(ip_parts[3]), int(ip_parts[3]) + 3) :
             addr = network_ip + str(ip)
             print(addr)
             command = ping + addr
