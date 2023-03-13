@@ -27,6 +27,21 @@ Container's localhost is not the same as your host's localhost
 # 1. Отмечаем breakpoints, запускаем дебаггер
 # 2. В Postman отправляем запрос и смотрим в окне дебаггера...
 
+        # пришлосъ пойти на такую хитрость с replace(), терерь сканер работает! Символ '\\n' был удалён из 4-го октета.
+        ip_parts[3] = ip_parts[3].replace('\\n', '')
+        print(ip_parts[3])
+        network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
+        ping = "ping -c 1 "
+        time1 = datetime.datetime.now()
+        # for ip in range(115, 118) :  # так отрабатывает, ниже вариант даёт ошибку:
+            #     for ip in range(int(ip_parts[3]), int(ip_parts[3])+int(5)) :
+            #                     ^^^^^^^^^^^^^^^^
+            # ValueError: invalid literal for int() with base 10: '1\\n\\n'
+            # проблема связана со строкой выше: content = self.rfile.read(length), где добаляюся символы 'b', \n.
+            # надо их удалить, работаю...
+
+
+*******************************************************************
 # Documentation: https://docs.python.org/3/library/http.server.html
 # вызвал сервер командой:
 # python -m http.server
