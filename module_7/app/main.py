@@ -83,7 +83,7 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
         ping = "ping -c 1 "
         time1 = datetime.datetime.now()
-        for ip in range(int(ip_parts[3]), int(ip_parts[3]) + 3) :
+        for ip in range(int(ip_parts[3]), int(ip_parts[3]) + 3) : # здесь 3 - nun_scanned_hosts
             addr = network_ip + str(ip)
             print(addr)
             command = ping + addr
@@ -103,6 +103,7 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         temp = self.set_headers()
         print(temp)
         # Если получаем POST запрос:
+        # http_request_response = send_http_request(temp)
         http_request_response = send_http_request("https://ya.ru", "GET", "Server", "HTTP")
         self.wfile.write(f"Complete! Doubled number is: {http_request_response}".encode())
 

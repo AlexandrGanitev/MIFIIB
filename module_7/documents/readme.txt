@@ -55,6 +55,12 @@ RUN apt-get update
 RUN apt-get install -y python
 RUN apt-get install -y iputils-ping
 *******************************************************************
+POST request: теперь вместо закодированной строки в do_POST() хочется
+разобраться, как парсится строка и как передавать её в запросе Postman-а
+
+Отправляю POST запрос на API, а в теле запроса указываю:
+{"method": "GET", "url":"https://ya.ru"}
+*******************************************************************
 # Documentation: https://docs.python.org/3/library/http.server.html
 # вызвал сервер командой:
 # python -m http.server
