@@ -117,4 +117,4 @@ class ServiceHandler(BaseHTTPRequestHandler) :
 server = HTTPServer(('0.0.0.0', 3009), ServiceHandler)
 server.serve_forever()
 
-# Смотри readme.txt для разъяснений.
+# Смотри !readme.txt для разъяснений.
