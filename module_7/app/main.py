@@ -8,10 +8,10 @@ import datetime
 existing_IP_addresses = []
 
 
-def do_ping_sweep(ip, num_scanned_hosts) :
+def do_ping_sweep(ip: str, num_scanned_hosts: str) :
     global existing_IP_addresses
     ip_parts = ip.split('.')
-    for host in range(num_scanned_hosts) :
+    for host in range(int(num_scanned_hosts)) :
         network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
         scanned_ip = network_ip + str(int(ip_parts[3]) + host)
         # c – Количество отправляемых пакетов, устанавливаем = 1, если больше, то будет больше строк вывода
@@ -77,36 +77,25 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         self.send_response(200)
         self.send_header("Content-type", "text/json")
         self.end_headers()
-        ip_parts = temp.split('.')
-        # пришлосъ пойти на такую хитрость с replace(), терерь сканер работает! '\\n' был удалён из 4-го октета.
-        ip_parts[3] = ip_parts[3].replace('\\n', '')
-        network_ip = ip_parts[0] + '.' + ip_parts[1] + '.' + ip_parts[2] + '.'
-        ping = "ping -c 1 "
-        time1 = datetime.datetime.now()
-        for ip in range(int(ip_parts[3]), int(ip_parts[3]) + 3) : # здесь 3 - nun_scanned_hosts
-            addr = network_ip + str(ip)
-            print(addr)
-            command = ping + addr
-            response = os.popen(command)
-            res = response.readlines()
-
-            for line in res :
-                if line.count("ttl") :
-                    self.wfile.write(("\n" + addr + "----- LIVE\n").encode())
-
-        time2 = datetime.datetime.now()
-        total_time = time2 - time1
-        self.wfile.write(f"Complete! in {total_time}".encode())
+        # удаление добавленных '\\n' символов из строки GET request:
+        temp = temp.replace('\\n', '')
+        payload = json.loads(temp)
+        scan_sweep_result = do_ping_sweep(payload["ip"], payload["num_scanned_hosts"])
+        self.wfile.write(f"Complete! The list of scanned LIVE IPs is : {scan_sweep_result}".encode())
 
     # Обрабатываем POST запросы
     def do_POST(self) :
         temp = self.set_headers()
-        print(temp)
-        # Если получаем POST запрос:
-        # http_request_response = send_http_request(temp)
+        print(temp) # prints the input from API to the console
+        self.send_response(200)
+        self.send_header("Content-type", "text/json")
+        self.end_headers()
         # Отправить POST запрос на API, а в теле запроса указать:
-        # {"method": "GET", "url":"https://ya.ru"}
-        http_request_response = send_http_request("https://ya.ru", "GET", "Server", "HTTP")
+        # {"target":"https://ya.ru", "method": "GET"}
+        # переменная payload получает словарь {} в виде: {"target":"https://ya.ru", "method": "GET"}
+        # из Postman, теперь по ключам можно передавать значения в основную функцию:
+        payload = json.loads(temp)
+        http_request_response = send_http_request(payload["target"], payload["method"])
         self.wfile.write(f"Complete! Doubled number is: {http_request_response}".encode())
 
 
@@ -114,4 +103,4 @@ class ServiceHandler(BaseHTTPRequestHandler) :
 server = HTTPServer(('0.0.0.0', 3009), ServiceHandler)
 server.serve_forever()
 
-# Смотри readme.txt для разъяснений.
+# Смотри !readme.txt для разъяснений
