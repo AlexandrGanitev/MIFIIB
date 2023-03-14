@@ -9,6 +9,9 @@ LABEL module=7.10
 COPY ./requirements.txt /code/requirements.txt
 # folder /code belongs to the inner structure of this Docker container
 RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update
+RUN apt-get install -y python
+RUN apt-get install -y iputils-ping
 COPY ./app /code/app
 EXPOSE 3009
 ENTRYPOINT ["python3"]
@@ -41,8 +44,16 @@ Container's localhost is not the same as your host's localhost
             # ValueError: invalid literal for int() with base 10: '1\\n\\n'
             # проблема связана со строкой выше: content = self.rfile.read(length), где добаляюся символы 'b', \n.
             # надо их удалить, работаю...
-
-
+*******************************************************************
+Note: when the Python script is modified, the Docker image has to be rebuilt.
+Also, check the IP, the terminal is linked when the ping is working, it's 172.17.0.1 - this is the address of the
+system of the container.
+*******************************************************************
+При запуске сканера (GET запрос) на указанный IP, возникала ошибка: /bin/sh: 1: ping: not found
+Почитал и установил дополнительные пакеты в Dockerfile:
+RUN apt-get update
+RUN apt-get install -y python
+RUN apt-get install -y iputils-ping
 *******************************************************************
 # Documentation: https://docs.python.org/3/library/http.server.html
 # вызвал сервер командой:
