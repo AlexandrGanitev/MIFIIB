@@ -104,6 +104,8 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         print(temp)
         # Если получаем POST запрос:
         # http_request_response = send_http_request(temp)
+        # Отправить POST запрос на API, а в теле запроса указать:
+        # {"method": "GET", "url":"https://ya.ru"}
         http_request_response = send_http_request("https://ya.ru", "GET", "Server", "HTTP")
         self.wfile.write(f"Complete! Doubled number is: {http_request_response}".encode())
 
