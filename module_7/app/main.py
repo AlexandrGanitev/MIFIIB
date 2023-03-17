@@ -79,6 +79,10 @@ class ServiceHandler(BaseHTTPRequestHandler) :
         self.end_headers()
         # удаление добавленных '\\n' символов из строки GET request:
         temp = temp.replace('\\n', '')
+        # Отправить GET запрос на API, а в теле запроса указать:
+        # {"ip":"192.168.1.1","num_scanned_hosts":"3"}
+        # переменная payload получает словарь {} в виде: {"ip":"192.168.1.1","num_scanned_hosts":"3"}
+        # из Postman, теперь по ключам можно передавать значения в основную функцию:
         payload = json.loads(temp)
         scan_sweep_result = do_ping_sweep(payload["ip"], payload["num_scanned_hosts"])
         self.wfile.write(f"Complete! The list of scanned LIVE IPs is : {scan_sweep_result}".encode())
