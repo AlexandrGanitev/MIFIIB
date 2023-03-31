@@ -1,6 +1,6 @@
 import os
 import argparse
-from typing import TextIO
+# from typing import TextIO
 import requests
 import json
 
@@ -33,17 +33,17 @@ def do_ping_sweep(ip, num_of_host) :
     # при успешном пинге, строк будет 5, ищем по паттерну "ttl"
     print(f"[#] Result of scanning {scanned_ip}\n{res[0]}\n{res[2]}\n{res[3]}", end='\n\n')
 
-    if any(("ttl=" in word for word in res) or ("TTL=" in word for word in res)) :
+    if any(("ttl=" in word for word in res) or ("TTL=" in word for word in res)):
         print("This IP belongs to the network\n")
         existing_IP_addresses += [scanned_ip]
         print('*' * 70)
-    else :
+    else:
         print(f"This IP doesn't belong to the network\n")
         print('*' * 70)
         return existing_IP_addresses
 
 
-def sent_http_request(target, method, headers=None, payload=None) :
+def send_http_request(target, method, headers=None, payload=None) :
     headers_dict = dict()
     if headers :
         for header in headers :
@@ -79,8 +79,8 @@ if args.task == 'scan' :
     print("\nList of existing IP addresses:")
     print(existing_IP_addresses)
     print('*' * 70 + '\n')
-else :
-    sent_http_request(args.target, args.method, args.headers, args.payload)
+else:
+    send_http_request(args.target, args.method, args.headers, args.payload)
 
 # # Writing to file
 # listIP: TextIO
@@ -92,14 +92,11 @@ else :
 #         listIP.write(line + '\n')
 
 
-# ******** All works ***********
-# Запуск сканера: python3 scaner_original.py scan -i 192.168.1.1 -n 10
+# ******** All works ********
+# Запуск сканера: python3 _network_hosts_scanner_final.py scan -i 192.168.1.1 -n 10
 # или с начала пула существующих адресов:
-# python3 scaner_original.py scan -i 192.168.1.110 -n 140
+# python3 _network_hosts_scanner_final.py scan -i 192.168.1.110 -n 140
 # программа составляет список IP адресов, которые дают ответ по паттерну 'ttl'
 # Запуск HTTP запроса: HTTP request to https://google.com:
 # python3 _network_hosts_scanner_final.py sendhttp -t https://google.com -m GET -hd Accept-Language:ru
-# ******************************
-# Напоминание: запуск venv
-#  python3.9 -m venv venv
-#  source <myProjectLocation>/venv/bin/activate
+
