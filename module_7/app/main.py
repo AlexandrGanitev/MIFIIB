@@ -3,7 +3,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import os
 import requests
 import json
-import datetime
+
 # пока программа работает, она будет добавлять IP в existing_IP_addresses. При перезапуске - обнуление списка:
 existing_IP_addresses = []
 
