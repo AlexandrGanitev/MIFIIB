@@ -1,0 +1,1 @@
+This directory has been created to start working on the new book and to enter the code here.
