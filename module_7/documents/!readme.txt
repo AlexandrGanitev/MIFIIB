@@ -22,7 +22,7 @@ CMD ["app/main.py"]
             Запуск самой программы (до Докера):
 1. Переходим в папку (module_7), где лежит app/main.py и запускаем:
 $ python3 app/main.py (app - это для указания субдиректории, где лежит main.py, можно из неё запустить)
-2. Запускаем Postman и отправлям GET request
+2. Запускаем Postman и отправляем GET request
             Создание контейнера в Docker, запуск программ из контейнера и отправка запросов GET и POST
 Создание Docker image:
 $ module_7 % docker build -t scanner_postman .
