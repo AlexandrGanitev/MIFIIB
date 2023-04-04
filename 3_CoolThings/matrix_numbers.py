@@ -5,18 +5,17 @@ import time
 try :
     import bext, colorama
 except ImportError :
-    print("Bext and colorama modules are required to run the probram")
+    print('Bext and colorama modules are required to run the program')
     sys.exit()
 
 
-# This class is responsible for creating each drop (number)
-class Drop() :
+class Drop :
     def __init__(self) :
         self.x = random.randint(0, width)
         self.y = -1
         self.drop_type = random.randint(0, 1)
         self.timeout = random.randint(0, 3)
-        self.wait_cound = random.randint(0, 3)
+        self.wait_count = random.randint(0, 3)
 
     def renew(self) :
         self.__init__()
@@ -48,7 +47,7 @@ def is_rb_corner(x, y) :
 
 
 def con_print(x, y, color, symbol) :
-    if not is_rb_corner(y, y) :
+    if not is_rb_corner(x, y) :
         bext.goto(x, y)
         sys.stdout.write(color)
         print(symbol, end='')
@@ -62,21 +61,21 @@ width -= 1
 height -= 1
 
 green = colorama.Fore.GREEN
-lgreen = colorama.Fore.LIGHTYELLOW_EX
+lgreen = colorama.Fore.LIGHTGREEN_EX
 
 drops = []
-for i in range(1, width*2//3):
+for i in range(1, width * 2 // 3) :
     drop = Drop()
     drops.append(drop)
 
-while True:
-    for drop in drops:
-        if drop.move():
+while True :
+    for drop in drops :
+        if drop.move() :
             drop.draw()
-            if drop.y >= height:
+            if drop.y >= height :
                 drop.renew()
-    key = bext.getKey(Blocking = False)
-    if key == 'esc':
+    key = bext.getKey(blocking=False)
+    if key == 'esc' :
         bext.clear()
         sys.exit()
     time.sleep(0.02)
