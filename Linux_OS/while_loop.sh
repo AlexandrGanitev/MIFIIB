@@ -9,6 +9,7 @@ break
 fi
 done
 echo 'я посчитал до 4'
+
 echo 'скрипт можно запустить так:'
 echo './while_loop.sh 2'
 echo 'sh while_loop.sh 2'
