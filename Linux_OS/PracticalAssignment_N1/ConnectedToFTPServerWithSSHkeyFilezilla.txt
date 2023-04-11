@@ -1,0 +1,21 @@
+Настроил FTP server, connected via terminal.
+Затем попробовал PuTTY, но так и не нашёл PuTTYgen.
+Установил FileZilla и используя ранее созданный SSH private key,
+импортировал его, подключился к виртуальному Убунту серверу с MacOS.
+
+Document: https://wiki.filezilla-project.org/Howto#:~:text=Press%20Command%2DShift%2DG%20to,to%20close%20the%20Settings%20dialog
+
+On a Mac
+If for some reason you are not using ssh-agent and on a Mac, don't worry about SSH key conversion. Just import your key via Settings and then use Normal mode in your site connection definition. The imported key will get used.
+
+The following instructions assume you have a working SSH configuration which allows you to ssh to the same host without a password. They are adapted from a thread on superuser.com and are summarized here so you don't have to search through a lot of dead ends:
+
+In FileZilla → Settings..., select Connection → SFTP
+Press the Add key file... button
+Press Command-Shift-G to bring up a path selection window and type "~/.ssh"
+Select the "id_rsa" key file and click Open (this imports the key)
+Click OK to close the Settings dialog
+Open menu File → Site Manager...
+Select the site with which you want to use the key
+Choose Protocol "SFTP" and select Logon Type "Normal". Don't worry about a password if your key file doesn't have a password
+Click Connect and you'll see your files
