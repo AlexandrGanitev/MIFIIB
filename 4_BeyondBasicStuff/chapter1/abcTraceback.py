@@ -10,7 +10,11 @@ def b() :
 
 def c() :
     print('Start of c()')
-    42 / 0  # This will call a ZeroDivizion error.
+    42 / 0  # This will call a ZeroDivision error.
 
 
 a()  # Calling a().
+#
+# The error is thrown in the line, where the functions starts,
+# which means you need to investigate the lines after or sometimes above.
+#
