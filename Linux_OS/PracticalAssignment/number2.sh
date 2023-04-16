@@ -1,15 +1,19 @@
-  GNU nano 6.2                                              number2.sh *                                                     
 #!/bin/bash
-
-# Navigate to the user's home directory:
-file=~/.local/bin/number2.sh
-chmod +x $file
-printf "\n"
-echo "Granting +x permissions on the number2.sh script file"
-cd ~/ and ls -l
-
+DATE=$(date +%d-%m-%Y)
+BACKUP_DIR="/home/skillfactory_lab/archive/"
 # Creating the backup with archiving:
 echo "Creating the backup with archiving..."
-tar -zcvpf /archive/AG_backup-"Created on $(date +%d-%B-%Y).tar.gz" /home/skillfactory_lab/Desktop \
+sudo tar -zcvpf $BACKUP_DIR/Created_By_AG-$DATE.tar.gz /home/skillfactory_lab/Desktop \
 /home/skillfactory_lab/docker /home/skillfactory_lab/Documents /home/skillfactory_lab/PycharmProjects \
 /home/skillfactory_lab/data /etc/ssh/sshd_config /etc/xrdp /etc/vsftpd.conf /var/log
+
+# To delete files older than 15 days
+find $BACKUP_DIR/* -mtime +15 -exec rm {} \;
+
+# Здесь мой скрипт создаёт архив, сжимает его и помещает в директории /archive, что
+# исключает дополнительное перемещение файла командой mv.
+# Сам скрипт запускается из директории, где я сохранял все скрипты: ~/.local/bin/
+
+# main command:
+# tar -zcvpf /[Backup_Location]/[Backup_Filename] /[User_Home_Directory_Location]
+
