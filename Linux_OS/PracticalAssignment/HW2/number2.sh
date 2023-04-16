@@ -14,7 +14,7 @@ find $BACKUP_DIR/* -mtime +15 -exec rm {} \;
 # исключает дополнительное перемещение файла командой mv.
 # Сам скрипт запускается из директории, где я сохранял все скрипты: ~/.local/bin/
 # Tar_Backup_AG_created.png демонстрирует созданный архив. Crontab_file_with_number2.sh.png демонстрирует
-# модифицированый cron файл для выполнения резервного копирования каждую пятницу, в 18:30.
+# модифицированный cron файл для выполнения резервного копирования каждую пятницу, в 18:30.
 
 # main command:
 # tar -zcvpf /[Backup_Location]/[Backup_Filename] /[User_Home_Directory_Location]
