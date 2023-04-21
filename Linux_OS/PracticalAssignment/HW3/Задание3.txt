@@ -162,8 +162,8 @@ However, be careful when modifying these settings, as incorrect configurations c
 Conclusion
 In conclusion, configuring Postfix to use Gmail SMTP on Ubuntu is a simple and effective way to send and receive email on your Linux system. By following steps outlined in this article, you can easily set up and test your Postfix configuration to ensure it works correctly.
 
-Remember to keep your Gmail account secure by disabling "Less Secure Apps" feature once you are done testing. Also, regularly update your system and use strong passwords to protect your email data from unauthorized access.
-
+(!) Remember to keep your Gmail account secure by disabling "Less Secure Apps" feature once you are done testing. Also, regularly update your system and use strong passwords to protect your email data from unauthorized access.
+********************************************************************
 Logs:
 
  sudo nano sasl_passwd
@@ -171,6 +171,7 @@ skillfactory_lab@Linux:/etc/postfix/sasl$ sudo nano /etc/postfix/main.cf
 skillfactory_lab@Linux:/etc/postfix/sasl$ sudo postfix reload
 postfix/postfix-script: refreshing the Postfix mail system
 skillfactory_lab@Linux:/etc/postfix/sasl$ sudo postmap /etc/postfix/sasl/sasl_passwd
+    Отправка почтового сообщения:
 skillfactory_lab@Linux:/etc/postfix/sasl$ echo "This is a test email from Postifx." | mail -s "Postfix test email" g.alexanders@gmail.com
 skillfactory_lab@Linux:/etc/postfix/sasl$ tail /var/log/mail.log
 Apr 21 13:27:58 Linux postfix/cleanup[10090]: 20B002C1B63: message-id=<20230421102758.20B002C1B63@Linux>
@@ -185,7 +186,8 @@ Apr 21 13:27:59 Linux postfix/smtp[10092]: 486372C1B65: to=<skillfactory_lab@Lin
 Apr 21 13:27:59 Linux postfix/qmgr[10078]: 486372C1B65: removed
 
 ********
-Updated some configurations' settings, got the message:
+        Конфигурация main.cf
+Updated some configurations' settings, receive the email in my Gmail account:
 
 sudo nano /etc/postfix/main.cf
 # TLS parameters
@@ -219,7 +221,7 @@ smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
 smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
 #smtp_use_tls = yes
 
-Перегружаем сервис, тестируем:
+Перегружаем сервис (после изменения конфигурации main.cf), тестируем:
 
 sudo postfix reload
 postfix/postfix-script: refreshing the Postfix mail system
@@ -249,4 +251,10 @@ Last used
 Postfix
 12:43 PM
 –
-********
+***************************************************************************************************************************************
+        Запуск Logwatch!!!
+Logwatch - отправка моих логов на GMAIL, через Postfix:
+
+$ sudo logwatch --detail high --mailto g.alexanders@gmail.com --range today --service vsftpd --service sshd --format html --output mail
+
+--service xrdp не значится в списке сервисов Logwatch...
