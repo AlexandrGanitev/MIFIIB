@@ -97,9 +97,9 @@ To create password file, run following command −
 sudo nano /etc/postfix/sasl_passwd
 Then add following line to the file −
 
-[smtp.gmail.com]:587
-your_email_address@gmail.com:your_gmail_password
+[smtp.gmail.com]:587 your_email_address@gmail.com:your_gmail_password
 Replace "your_email_address" with your Gmail email address and "your_gmail_password” with your actual Gmail password.
+(example [App password removed] [smtp.gmail.com]:587 g.alexanders@gmail.com:qasmuhppnydrjnpa)
 
 After adding line, save and exit the file.
 
