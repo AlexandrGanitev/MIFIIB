@@ -260,3 +260,4 @@ $ sudo logwatch --detail high --mailto g.alexanders@gmail.com --range All --serv
 --service xrdp не значится в списке сервисов Logwatch...
 
 Можно использоватъ разные форматы и range для охвата периода пересылаемых логов (--range All).
+
