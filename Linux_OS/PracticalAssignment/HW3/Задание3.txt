@@ -255,7 +255,7 @@ Postfix
         Запуск Logwatch!!!
 Logwatch - отправка моих логов на GMAIL, через Postfix:
 
-$ sudo logwatch --detail high --mailto g.alexanders@gmail.com --range today --service vsftpd --service sshd --format html --output mail
+$ sudo logwatch --detail high --mailto g.alexanders@gmail.com --range All --service vsftpd --service sshd --format html --output mail
 
 --service xrdp не значится в списке сервисов Logwatch...
 
