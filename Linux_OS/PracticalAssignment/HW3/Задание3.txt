@@ -258,3 +258,5 @@ Logwatch - отправка моих логов на GMAIL, через Postfix:
 $ sudo logwatch --detail high --mailto g.alexanders@gmail.com --range today --service vsftpd --service sshd --format html --output mail
 
 --service xrdp не значится в списке сервисов Logwatch...
+
+Можно использоватъ разные форматы и range для охвата периода пересылаемых логов (--range All).
