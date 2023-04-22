@@ -10,6 +10,32 @@ iptables -L
 УСЛОВИЯ РЕАЛИЗАЦИИ
 В отчёте ментору приложите 3 снимка:
 
-скриншот правила (iptables -I INPUT -p icmp --icmp-type echo-request -j DROP)
+скриншот правила (iptables -A INPUT -p icmp -j DROP)
 скриншот неудачной попытки соединения,
-скриншот исходных настроек.
+скриншот исходных настроек. (Removed added rule - iptables -D INPUT -p icmp -j DROP)
+
+***************************************************
+Zero (0) is for echo-reply (pong)
+Eight (8) is for echo-request (ping)
+This page explains how to allow or block ICMP ping request using the iptables command.
+
+Linux iptables rules ICMP ping request syntax
+To enable ICMP ping incoming client request use following iptables rule (you need to add following rules to script). My default firewall policy is blocking everything. The syntax is:
+
+Syntax:
+
+1. iptables -A {INPUT|OUTPUT} -p icmp -j {ACCEPT|REJECT|DROP}
+2. iptables -A {INPUT|OUTPUT} -p icmp --icmp-type {0|8}  -j {ACCEPT|REJECT|DROP}
+3. iptables -A {INPUT|OUTPUT} -p icmp --icmp-type {echo-reply|echo-request} -j {ACCEPT|REJECT|DROP}
+4. iptables -A {INPUT|OUTPUT} -p icmp --icmp-type {echo-reply|echo-request} -m state --state NEW,ESTABLISHED,RELATED -j {ACCEPT|REJECT|DROP}
+Where,
+
+-A {INPUT|OUTPUT} : Append firewall rule to INPUT or OUTPUT chain.
+-p icmp : Use the icmp protocol.
+-p icmp --icmp-type {0|8} OR --icmp-type {echo-reply|echo-request} : icmp match option by number such as ‘0’ or by name such as ‘echo-reply’.
+-j {ACCEPT|REJECT|DROP} : Tell Linux what to do if the packet matches it. The ACCEPT means to let the packet through. The DROP or REJECT means to drop the packet on the floor. Use the REJECT when you want the other end (client or host or bot) to know the port is unreachable and use the DROP for connections to hosts you do not want people/bots/client to see.
+-m state --state NEW,ESTABLISHED,RELATED : Extended icmp packet matching using the --ctstate or -m state option. The values are:
+INVALID : The packet is associated with no known connection.
+NEW : The packet has started a new connection or otherwise associated with a connection which has not seen packets in both directions.
+ESTABLISHED : The packet is associated with a connection which has seen packets in both directions.
+RELATED : The packet is starting a new connection, but is associated with an existing connection, such as an FTP data transfer or an ICMP error.
