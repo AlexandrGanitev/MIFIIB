@@ -39,3 +39,4 @@ INVALID : The packet is associated with no known connection.
 NEW : The packet has started a new connection or otherwise associated with a connection which has not seen packets in both directions.
 ESTABLISHED : The packet is associated with a connection which has seen packets in both directions.
 RELATED : The packet is starting a new connection, but is associated with an existing connection, such as an FTP data transfer or an ICMP error.
+
