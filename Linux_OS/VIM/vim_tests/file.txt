@@ -1,0 +1,8 @@
+This is my zero VIM file, created in this new directory.
+I'm going to work on my "Learn-Vim short course to master it.
+
+Test: meat meat tasty meat meat meat very tasty!
+# the command here was bash: vim +%s/pancake/meat/g file.txt
+# another option: vim -c %s/pancake/meat/g file.txt
+
+
