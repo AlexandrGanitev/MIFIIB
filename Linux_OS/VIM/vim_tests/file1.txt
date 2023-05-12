@@ -1,4 +1,4 @@
-This is my first VIM file for various experimentation with this powerful tool.
+his is my first VIM file for various experimentation with this powerful tool.
 To save the file use: :wq or :wq!
 
 
