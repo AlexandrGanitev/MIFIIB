@@ -1,0 +1,5 @@
+- hosts: example_devices
+  tasks:
+    -   name: Installing apache2
+        become: yes
+        apt: pkg=apache2 state=installed
