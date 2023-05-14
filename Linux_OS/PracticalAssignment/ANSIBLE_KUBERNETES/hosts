@@ -1,7 +1,7 @@
 # Here's another example of host ranges, this time there are no leading 0s:
 # My personal inventory group:
 [Ganitev]
-Ubuntu22 ansible_host=192.168.1.127 ansible_ssh_user=skillfactory_lab ansible_sudo_pass=Vasik_22*3
+Ubuntu22 ansible_host=192.168.1.127 ansible_ssh_user=skillfactory_lab ansible_sudo_pass=############
 
 #[Ganitev]
 #Ubuntu22
