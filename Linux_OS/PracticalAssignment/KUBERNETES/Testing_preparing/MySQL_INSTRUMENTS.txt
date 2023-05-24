@@ -1,0 +1,13 @@
+MYSQL_GUITARS
+
+INSERT INTO guitars (id, brand, model) VALUES
+        -> ('1', 'ADMIRA', 'ARTISTA'),
+	-> ('2', 'TAYLOR', 'CE110'),
+	-> ('3', 'MARTIN', 'D28'),
+	-> ('4', 'OVATION', 'ADAMAS'),
+	-> ('5', 'YAMAHA', 'FG800'),
+	-> ('6', 'EPIPHONE', 'DR-100'),
+	-> ('7', 'TAKAMINE', 'P3NY'),
+	-> ('8', 'MARTIN', 'SC-13E'),
+	-> ('9', 'MATON', 'SRS');
+
