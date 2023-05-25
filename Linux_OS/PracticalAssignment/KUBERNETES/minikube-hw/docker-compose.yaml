@@ -5,13 +5,13 @@ services:
     container_name: db26
     command: '--init-file /data/application/init.sql'
     environment:
-      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: $password
       MYSQL_DATABASE: instruments
     volumes:
       - './dbfile:/var/lib/mysql'
       - './init.sql:/data/application/init.sql'
     ports:
-      - '3308:3306'
+      - '3306:3306'
     restart: 'always'
   php-apache-server:
     image: 'ganitev2:latest'

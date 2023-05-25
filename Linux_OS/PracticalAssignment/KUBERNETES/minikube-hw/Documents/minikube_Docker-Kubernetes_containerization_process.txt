@@ -79,6 +79,10 @@ Tagging and Pushing mysql:5.7 container:
 alexandrganitev@Alexandrs-MBP minikube-hw % docker tag dd6675b5cfea alexandrganitev/mifiib23ag:mysql
 alexandrganitev@Alexandrs-MBP minikube-hw % docker push alexandrganitev/mifiib23ag:mysql
 
+10. Created 4 YAML files and applied them:
+mysql-config.yaml, mysql-secret.yaml, mysql-deployment.yaml, webapp-deployment.yaml
+
+
 
 ****************************
 Вопросы к менторам:
