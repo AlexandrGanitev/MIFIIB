@@ -96,6 +96,15 @@ mysql-config.yaml, mysql-secret.yaml, mysql-deployment.yaml, webapp-deployment.y
 11. Check the dashboard (inventory of deployed pods):
 minikube dashboard --profile=minikube-hw
 
+12. Check the IP addresses of the Nodes:
+alexandrganitev@Alexandrs-MBP minikube-hw % minikube ip -n minikube-hw-m03
+192.168.67.4
+alexandrganitev@Alexandrs-MBP minikube-hw % minikube ip -n minikube-hw-m02
+192.168.67.3
+alexandrganitev@Alexandrs-MBP minikube-hw % minikube ip -n minikube-hw
+192.168.67.2
+
+
 
 ****************************
 Вопросы к менторам:
