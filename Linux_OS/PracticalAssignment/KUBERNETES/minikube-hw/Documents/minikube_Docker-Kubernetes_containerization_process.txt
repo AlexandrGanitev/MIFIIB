@@ -82,6 +82,19 @@ alexandrganitev@Alexandrs-MBP minikube-hw % docker push alexandrganitev/mifiib23
 10. Created 4 YAML files and applied them:
 mysql-config.yaml, mysql-secret.yaml, mysql-deployment.yaml, webapp-deployment.yaml
 
+    alexandrganitev@Alexandrs-MBP minikube-hw % kubectl apply -f mysql-config.yaml
+    configmap/mysql-config created
+    alexandrganitev@Alexandrs-MBP minikube-hw % kubectl apply -f mysql-secret.yaml
+    secret/mysql-secret created
+    alexandrganitev@Alexandrs-MBP minikube-hw % kubectl apply -f mysql-deployment.yaml
+    deployment.apps/mysql-deployment created
+    service/mysql-service created
+    alexandrganitev@Alexandrs-MBP minikube-hw % kubectl apply -f webapp-deployment.yaml
+    deployment.apps/webapp-deployment created
+    service/webapp-service created
+
+11. Check the dashboard (inventory of deployed pods):
+minikube dashboard --profile=minikube-hw
 
 
 ****************************

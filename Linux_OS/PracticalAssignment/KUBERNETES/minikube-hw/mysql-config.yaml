@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
     name: mysql-config
 data:
-    mongo-url: mysql-service
+    mysql-url: mysql-service
