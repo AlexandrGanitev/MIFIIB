@@ -68,7 +68,7 @@ f60117696410: Mounted from alexandrganitev/ganitev2
 ec4a38999118: Mounted from alexandrganitev/ganitev2
 latest: digest: sha256:08e92f00dbc6f19835cae3e85f2d9aa4c8a25df3f551fba8b76e9187d5c417ba size: 3457
 
-Исправляю tag коммандой docker push alexandrganitev/mifiib23ag:tagname:
+Исправляю tag командой docker push alexandrganitev/mifiib23ag:tagname:
 docker tag 6c1342d8f002 alexandrganitev/mifiib23ag:ganitev2
 
 Tagging and Pushing mysqlclient_ag container:
