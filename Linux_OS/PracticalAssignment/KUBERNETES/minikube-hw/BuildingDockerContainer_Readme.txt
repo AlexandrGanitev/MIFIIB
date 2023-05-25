@@ -1,9 +1,17 @@
 It was about 3 months, since I set up the docker with mysql and php. Adding some steps.
 
-1. Navigate to the directory of the Dockerfile and YAML, build the php apache:
+1. Navigate to the directory of the Dockerfile and YAML (main, not client subdirectory[!]), build the php apache:
     docker build -t ganitev2:latest .
 2. Compose the containers:
     docker-compose up
+
+Note: in case of this error - "Error response from daemon: pull access denied for mysqlclient_ag, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+", docker logout, buitd, login and push: https://jhooq.com/requested-access-to-resource-is-denied/ (It might not work).
+Then the second solution:
+    a. cd /client -> docker build -t mysqlclient_ag:latest .
+    b. cd .. -> ocker build -t ganitev2:latest .
+    c. docker-compose up (тогда "композитор" видит все файлы и собирает их)
+
 3. Log in to mysqlclient_ag, and add the instruments to the DB:
     docker exec -ti mysqlclient_ag /bin/bash (в случае этого контейнера будет именно /bin/bash)
     # mysql -h 172.18.0.2 -u root -padmin (here find the IP of the container from Visual Code Studio, go to Docker,

@@ -1,0 +1,137 @@
+1. Created the minikube cluster:
+    minikube start --nodes 3 -p minikube-hw
+2. Enabled Dashboard feature:
+    minikube -p minikube-hw addons enable metrics-server
+💡  metrics-server is an addon maintained by Kubernetes. For any concerns contact minikube on GitHub.
+You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
+    ▪ Using image registry.k8s.io/metrics-server/metrics-server:v0.6.3
+🌟  The 'metrics-server' addon is enabled
+3. Verified nodes:
+    minikube dashboard --profile=minikube-hw
+4. Set up the default profile of the new minikube-hw cluster:
+    minikube config set profile minikube-hw
+5. Check the Nodes:
+    kubectl get nodes
+NAME              STATUS   ROLES           AGE   VERSION
+minikube-hw       Ready    control-plane   21m   v1.26.3
+minikube-hw-m02   Ready    <none>          20m   v1.26.3
+minikube-hw-m03   Ready    <none>          20m   v1.26.3
+6. Check the services:
+kubectl get Services
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   22m
+7. Adding the docker cache images: <название локального образа>
+    alexandrganitev@Alexandrs-MBP minikube-hw % minikube cache add ganitev2
+❗  "minikube cache" will be deprecated in upcoming versions, please switch to "minikube image load"
+^C
+    minikube image load ganitev2
+    minikube image load mysqlclient_ag
+    minikube image load mysql
+8. Check the Pods, Nodes, Services and cluster-info:
+alexandrganitev@Alexandrs-MBP minikube-hw % kubectl get pods
+No resources found in default namespace.
+alexandrganitev@Alexandrs-MBP minikube-hw % kubectl get nodes
+NAME              STATUS   ROLES           AGE   VERSION
+minikube-hw       Ready    control-plane   88m   v1.26.3
+minikube-hw-m02   Ready    <none>          87m   v1.26.3
+minikube-hw-m03   Ready    <none>          87m   v1.26.3
+alexandrganitev@Alexandrs-MBP minikube-hw % kubectl get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   88m
+alexandrganitev@Alexandrs-MBP minikube-hw % kubectl cluster-info
+Kubernetes control plane is running at https://127.0.0.1:50694
+CoreDNS is running at https://127.0.0.1:50694/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+9. To use the Docker images in Kubernetes, I needed to make my docker images Public. Created the Public repository
+on Docker Hub - mifiib23ag, tagged my images and pushed them to the repository.
+    example: docker tag <image id> user_docker/image_my
+    docker login (log in to Docker Hub with the right credentials), than Tab and Push the images to Repository:
+alexandrganitev@Alexandrs-MBP minikube-hw % docker tag 6c1342d8f002 alexandrganitev/mifiib23ag
+alexandrganitev@Alexandrs-MBP minikube-hw % docker push alexandrganitev/mifiib23ag
+Using default tag: latest
+The push refers to repository [docker.io/alexandrganitev/mifiib23ag]
+4cca92df1d89: Mounted from alexandrganitev/ganitev2
+c70f0f238e12: Mounted from alexandrganitev/ganitev2
+3d33242bf117: Mounted from alexandrganitev/ganitev2
+529016396883: Mounted from alexandrganitev/ganitev2
+5464bcc3f1c2: Mounted from alexandrganitev/ganitev2
+28192e867e79: Mounted from alexandrganitev/ganitev2
+d173e78df32e: Mounted from alexandrganitev/ganitev2
+0be1ec4fbfdc: Mounted from alexandrganitev/ganitev2
+30fa0c430434: Mounted from alexandrganitev/ganitev2
+a538c5a6e4e0: Mounted from alexandrganitev/ganitev2
+e5d40f64dcb4: Mounted from alexandrganitev/ganitev2
+44148371c697: Mounted from alexandrganitev/ganitev2
+797a7c0590e0: Mounted from alexandrganitev/ganitev2
+f60117696410: Mounted from alexandrganitev/ganitev2
+ec4a38999118: Mounted from alexandrganitev/ganitev2
+latest: digest: sha256:08e92f00dbc6f19835cae3e85f2d9aa4c8a25df3f551fba8b76e9187d5c417ba size: 3457
+
+Исправляю tag коммандой docker push alexandrganitev/mifiib23ag:tagname:
+docker tag 6c1342d8f002 alexandrganitev/mifiib23ag:ganitev2
+
+Tagging and Pushing mysqlclient_ag container:
+alexandrganitev@Alexandrs-MBP minikube-hw % docker tag f9d8bb968b21 alexandrganitev/mifiib23ag:mysqlclient_ag
+alexandrganitev@Alexandrs-MBP minikube-hw % docker push alexandrganitev/mifiib23ag:mysqlclient_ag
+
+Tagging and Pushing mysql:5.7 container:
+alexandrganitev@Alexandrs-MBP minikube-hw % docker tag dd6675b5cfea alexandrganitev/mifiib23ag:mysql
+alexandrganitev@Alexandrs-MBP minikube-hw % docker push alexandrganitev/mifiib23ag:mysql
+
+
+****************************
+Вопросы к менторам:
+
+@zkonst12 @Lexas @vs.ryzhov  
+День добрый коллеги!
+Возник вот какой вопрос по заданию:
+1. В качестве образов для двух контейнеров можно (но не обязательно) использовать уже созданные нами в модулях по Docker образы. Единственное отличие от приведённого примера — наши образы не представлены в публичном репозитории, поэтому их нужно вручную загрузить внутрь кластера:
+minikube cache add <название локального образа>
+->
+Здесь я воссоздал/пересобрал/сбилдил в Docker три контейнера из задания 2.6, добавил данные в MySQL 5.7 базу и успешно запустил localhost:8080 с элементами этой базы. 
+Затем я создал новый кластер (minikub-hw) с тремя нодами, добавил в него собранные три образа (minikube cache add <мой образ...>.
+
+
+2. Кроме того, файл index.php нужно чуть переписать, т. к. у нас адрес до БД и логин/пароль прописаны статически в самом файле. А должны браться из переменных окружения. 
+
+
+Вопросы: 
+1. После того, как мои образы Docker загружены в кластер, как их добавить в поды?
+2. Надо ли создавать mysql-configmap.yaml, mysql-secret.yaml, mysql-deployment.yaml, php-deployment.yaml файлы?
+3. Как именно указать в index.php/docker-compose.yaml username и password из переменных окружения (mysql-secret.yaml)? В index.php заменить ($mysqli = new mysqli("db26", "root", "admin", "instruments")) "root" на username, a "admin" на password? Также, в docker-compose.yaml заменить MYSQL_ROOT_PASSWORD: admin на password?
+
+
+
+Заранее благодарю, ибо уже несколько дней бодаю стену, вроде истина где-то рядом, но я не вижу её.
+**************************************************************************************************
+
+Помощь от Юрия:
+
+Надо ли создавать mysql-configmap.yaml, mysql-secret.yaml, mysql-deployment.yaml, php-deployment.yaml файлы?
+конечно надо, в этих манифестах ты указываешь все параметры развертывания: какие использовать докер-образы, секреты для логина и пароля, выделение ресурсов и т.д.
+
+
+После того, как мои образы Docker загружены в кластер, как их добавить в поды?
+всё загружаешь и применяешь через манифесты YAML, см пункт первый.
+
+
+наши образы не представлены в публичном репозитории
+А мои теперь представлены! Я их в свою репу на докер-хаб зааплодил, сделал их публичными и в манифестах указал.
+
+
+Как именно указать в index.php
+ну так как нам самое вкусное не показали на контактных, поэтому я, с тяжким, звероподобным рвением, придумал свой способ, но не думаю, что он правильный)) работает ну и ладно.
+просто в скрипте сделал присвоение переменным извлечённые и декодированные данные из конфига и секрета (ConfigMap.yaml,  secret.yaml), и подставил в строчку конекта к базе, всё работает. ДЗ сдал, всё по-красоте)
+
+
+дядя, Константина не беспокой, не ответит, он пилит новые модули, там столько накинули нового, даже то что мы уже прошли). 
+Блин заново чтоли курс начать, на своём потоке двоечник, хоть там буду на одни пятёрки учиться, ответы уже знаю)))
+
+
+PROSPERO
+
+17:57
+в манифесте php-apache прописан в блоке сервиса NodePort: 30080
+в итоге получаем поды и сервисы (отрывок из моей дз):
+
