@@ -104,7 +104,34 @@ alexandrganitev@Alexandrs-MBP minikube-hw % minikube ip -n minikube-hw-m02
 alexandrganitev@Alexandrs-MBP minikube-hw % minikube ip -n minikube-hw
 192.168.67.2
 
-13.
+13. Connect to the webapp pod:
+alexandrganitev@Alexandrs-MBP minikube-hw % kubectl get pods
+NAME                                READY   STATUS    RESTARTS   AGE
+mysql-deployment-64c8568df8-974vw   1/1     Running   0          64m
+webapp-deployment-cc5675b4d-dpt6l   1/1     Running   0          64m
+
+kubectl exec -ti webapp-deployment-cc5675b4d-dpt6l /bin/bash
+
+14. Connect to MySQL server in Kubernetes Pod:
+    kubectl get pods mysql-deployment-64c8568df8-974vw -o custom-columns=NAME:metadata.name,IP:status.podIP - find IP
+
+NAME                                IP
+mysql-deployment-64c8568df8-974vw   10.244.1.2
+
+    kubectl exec -ti mysql-deployment-64c8568df8-974vw /bin/bash - connecting to DB in the Pod mysql-deployment-64c8568df8-974vw
+    bash-4.2# mysql -h 10.244.1.2 -u root -padmin
+
+15.
+
+
+
+
+
+
+
+
+
+
 
 ****************************
 Вопросы к менторам:
@@ -161,3 +188,46 @@ PROSPERO
 в манифесте php-apache прописан в блоке сервиса NodePort: 30080
 в итоге получаем поды и сервисы (отрывок из моей дз):
 
+Добрый вечер Алексей, крайне срочно нужна ваша помощь.
+Суть вопроса вот в чём. В прошлом посте я объяснил, что пересоздал контейнеры из 2.6, запустил docker-compose up и достучался до моей базы, всё работает.
+Прошёл по материалам курса и воссоздал mongo-webapp кластер и успешно его запустил. После этого я создал новый кластер, и спасибо @yura.shamray, создал репозиторий на  DockerXab, загрузил туда мои контейнеры, создал и запустил YAML файлы:
+https://github.com/AlexandrGanitev/MIFIIB/tree/main/Linux_OS/PracticalAssignment/KUBERNETES/minikube-hw
+
+
+Разобрался с некоторыми ошибками (например, на Darwin я не могу запустить сервис с реальным IP, только из терминала [ default   | webapp-service |             | http://127.0.0.1:58849 ] , да ещё надо было искать порт, используемый в моей системе [ ps -ef | grep ssh ].
+
+
+Упёрся в стену. Менял порты в YAML файлах, убирал переменные окружения в index.php, docker-compose.yaml, т.е. пересобирал Докер контейнеры со статическими username/password, выходит та же ошибка: Forbidden:
+(Здесь можно посмотреть скриншоты проблем, связанных с моим кластером:
+https://github.com/AlexandrGanitev/MIFIIB/upload/main/Linux_OS/PracticalAssignment/KUBERNETES/minikube-hw/Documents/_Problems
+
+
+Также я подсоединился к моей mysql базе загруженную в кластер, но в ней нет instruments, та, что должна быть перенесена в кластер:
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+И это означает, что что-то совсем не так пошло.
+
+
+Для создания mysql образа в Докере, мы прописывали путь в docker-compose.yaml:
+    volumes:
+      - './dbfile:/var/lib/mysql'
+      - './init.sql:/data/application/init.sql'
+
+
+Надо ли править путь при добавлении этого контейнера в Kubernetes?
+
+
+Как и где можно просмотреть ошибки/проблемы контейнеризации?
+
+
+Помогите, не могу и знать, где ещё искать выход из создавшейся ситуации.
+
+
+Благодарю.
