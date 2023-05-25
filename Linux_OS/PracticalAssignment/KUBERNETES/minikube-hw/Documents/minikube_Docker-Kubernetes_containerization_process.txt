@@ -104,7 +104,7 @@ alexandrganitev@Alexandrs-MBP minikube-hw % minikube ip -n minikube-hw-m02
 alexandrganitev@Alexandrs-MBP minikube-hw % minikube ip -n minikube-hw
 192.168.67.2
 
-
+13.
 
 ****************************
 Вопросы к менторам:
