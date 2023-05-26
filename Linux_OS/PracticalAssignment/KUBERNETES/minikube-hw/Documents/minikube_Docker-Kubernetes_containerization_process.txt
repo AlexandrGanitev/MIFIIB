@@ -121,7 +121,16 @@ mysql-deployment-64c8568df8-974vw   10.244.1.2
     kubectl exec -ti mysql-deployment-64c8568df8-974vw /bin/bash - connecting to DB in the Pod mysql-deployment-64c8568df8-974vw
     bash-4.2# mysql -h 10.244.1.2 -u root -padmin
 
-15.
+15. Checking deployments:
+    minikube-hw % kubectl get deployments
+NAME                READY   UP-TO-DATE   AVAILABLE   AGE
+mysql-deployment    1/1     1            1           17h
+webapp-deployment   1/1     1            1           17h
+
+16. Get the Pod's information:
+    kubectl describe pod webapp-deployment-cc5675b4d-68r9
+
+
 
 
 

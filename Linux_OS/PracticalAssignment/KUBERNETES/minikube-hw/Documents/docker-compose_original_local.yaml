@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   db26:
-    image: 'alexandrganitev/mifiib23ag:mysql'
+    image: 'mysql:5.7'
     container_name: db26
     command: '--init-file /data/application/init.sql'
     environment:
@@ -14,7 +14,7 @@ services:
       - '3306:3306'
     restart: 'always'
   php-apache-server:
-    image: 'alexandrganitev/mifiib23ag:ganitev2'
+    image: 'ganitev2:latest'
     container_name: php-apache-m26
     ports:
       - '8080:80'
@@ -23,7 +23,7 @@ services:
     depends_on:
       - db26
   mysqlclient_ag:
-    image: 'alexandrganitev/mifiib23ag:mysqlclient_ag'
+    image: 'mysqlclient_ag:latest'
     container_name: mysqlclient_ag
     volumes:
       - './dbfile:/var/lib/mysql'
