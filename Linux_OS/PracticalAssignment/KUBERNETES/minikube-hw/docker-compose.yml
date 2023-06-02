@@ -11,7 +11,7 @@ services:
       - "3306:3306"
     build: './build/mysql'
     environment:
-      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: "DB_w31coMe!"
       MYSQL_DATABASE: "AG-Guitars-website"
     volumes:
       - dbData:/var/lib/mysql
