@@ -244,16 +244,50 @@ Bye
 bash-4.4# exit
 exit
 
+Created 4 YAML files and applied them:
+mysql-config.yaml, mysql-secret.yaml, mysql-deployment.yaml, webapp-deployment.yaml
+
+    alexandrganitev@Alexandrs-MBP minikube-hw % kubectl apply -f mysql-config.yaml
+    configmap/mysql-config created
+    alexandrganitev@Alexandrs-MBP minikube-hw % kubectl apply -f mysql-secret.yaml
+    secret/mysql-secret created
+    alexandrganitev@Alexandrs-MBP minikube-hw % kubectl apply -f mysql-deployment.yaml
+    deployment.apps/mysql-deployment created
+    service/mysql-service created
+    alexandrganitev@Alexandrs-MBP minikube-hw % kubectl apply -f webapp-deployment.yaml
+    deployment.apps/webapp-deployment created
+    service/webapp-service created
+
+alexandrganitev@Alexandrs-MBP minikube-hw % kubectl get nodes
+NAME              STATUS   ROLES           AGE   VERSION
+minikube-hw       Ready    control-plane   35m   v1.26.3
+minikube-hw-m02   Ready    <none>          34m   v1.26.3
+minikube-hw-m03   Ready    <none>          34m   v1.26.3
+alexandrganitev@Alexandrs-MBP minikube-hw % kubectl get pods
+NAME                                 READY   STATUS              RESTARTS   AGE
+mysql-deployment-8d85bf6-hqqs6       0/1     ContainerCreating   0          118s
+webapp-deployment-575c58b769-v9rks   0/1     ContainerCreating   0          108s
+alexandrganitev@Alexandrs-MBP minikube-hw % kubectl get svc
+NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+kubernetes       ClusterIP   10.96.0.1       <none>        443/TCP        35m
+mysql-service    ClusterIP   10.97.203.5     <none>        3306/TCP       2m9s
+webapp-service   NodePort    10.101.13.216   <none>        80:30100/TCP   119s
+
+When everything was build again, I got the Forbidden error, tried to copy index.php file from my webapp
+container to a running kubernetes webapp:
+
+alexandrganitev@Alexandrs-MBP minikube-hw % cd app
+alexandrganitev@Alexandrs-MBP app % ls
+index.php
+alexandrganitev@Alexandrs-MBP app % docker cp index.php 7934a4de2907:/var/www/html/index.php
+                             Successfully copied 2.56kB to 7934a4de2907:/var/www/html/index.php
 
 
 
 
 
-
-
-
-
-
+****************************
+----------------------------
 ****************************
 Вопросы к менторам:
 
