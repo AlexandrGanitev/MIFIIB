@@ -1,5 +1,5 @@
-FROM php:apache
-SHELL ["/bin/bash", "-c"]
-RUN ln -s ../mods-available/{expires,headers,rewrite}.load /etc/apache2/mods-enabled/
-RUN sed -e '/<Directory \/var\/www\/>/,/<\/Directory>/s/AllowOverride None/AllowOverride All/' -i /etc/apache2/apache2.conf
-COPY php.ini /usr/local/etc/php/
+FROM php:7.4-apache
+#WORKDIR /var/www/html
+LABEL Alexandr Ganitev, module 2.6 <g.alexanders@gmail.com>
+RUN apt-get clean && apt-get update
+RUN docker-php-ext-install mysqli pdo pdo_mysql

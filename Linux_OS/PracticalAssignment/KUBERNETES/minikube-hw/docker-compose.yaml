@@ -5,7 +5,7 @@ services:
     container_name: db26
     command: '--init-file /data/application/init.sql'
     environment:
-      MYSQL_ROOT_PASSWORD: $password
+      MYSQL_ROOT_PASSWORD: admin
       MYSQL_DATABASE: instruments
     volumes:
       - './dbfile:/var/lib/mysql'
