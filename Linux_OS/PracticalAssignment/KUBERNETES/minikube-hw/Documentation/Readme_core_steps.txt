@@ -1,3 +1,8 @@
+Note: The point of this minikube-hw rebuilding is the advise from Konstantine to create the Docker image
+as one file versus three, I created prior.
+
+Source used: https://doc4dev.com/en/create-a-web-site-php-apache-mysql-in-5-minutes-with-docker/
+
 1. Creating the docker-compose.yml file.
 We find two services, which represent our two containers:
 A. php-apache, will be accessible from port 80 of our machine which is the default HTTP port.
@@ -34,5 +39,96 @@ app/index.php
 echo 'Hello world!';
 
 4. Site building and testing
+A. So we have confirmation that Apache and PHP are active. The first container therefore does the job well. We will therefore now, to go around the subject, check that the MySQL container is indeed active, and that the first can connect to it.
+
+We are going to do this by connecting to MySQL from our terminal, to insert some data into a table that we are going to create, then try to display this same data from our index.php.
+
+You need the name of your MySQL container to get started. Nothing could be simpler: Execute the command
+
+$ docker ps --format '{{.Names}}'
+in a terminal. Copy the output that mentions the word “mysql”. Then, we will perform this sequence of commands to initialize our dataset:
+Or alternatively, check with command: docker container ls -a
+
+Start container (mysql) and connect to it:
+    docker exec -ti  minikube-hw-mysql-1 /bin/bash
+    or docker exec -ti  minikube-hw-mysql-1 bash
+
+    bash-4.4# mysql -uroot -pDB_w31coMe! (log in to mysql)
+mysql> use instruments;
+Database changed
+            Creating database:
+mysql> CREATE DATABASE IF NOT EXISTS instruments;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> CREATE USER IF NOT EXISTS 'user'@'%'
+    -> IDENTIFIED BY 'password';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> GRANT SELECT,UPDATE,INSERT ON instruments.* TO 'user'@'%';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> USE instruments;
+Database changed
+mysql>
+mysql> CREATE TABLE IF NOT EXISTS guitars (
+    ->     id INT(10) NOT NULL,
+    ->     brand VARCHAR(20) NOT NULL,
+    ->     model VARCHAR(40) NOT NULL,
+    ->     PRIMARY KEY (ID)
+    ->   );
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+            Inserting the data into the new database:
+mysql> INSERT INTO guitars (id, brand, model) VALUES
+    -> ('1', 'ADMIRA', 'ARTISTA');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> INSERT INTO guitars (id, brand, model) VALUES
+    -> ('2', 'TAYLOR', 'CE110'), ('3', 'MARTIN', 'D28'), ('4', 'OVATION', 'ADAMAS'), ('5', 'YAMAHA', 'FG800'), ('6', 'EPIPHONE', 'DR-100'), ('7', 'TAKAMINE', 'P3NY'), ('8', 'MARTIN', 'SC-13E'), ('9', 'MATON', 'SRS');
+Query OK, 8 rows affected (0.01 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> exit
+    exit (to get out of bash
+
+B. Modifying index.php
+
+<html lang="en">
+
+<head>
+    <title>Our Best Instruments</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+    <h1  align= "center">Accoustic Instruments</h1>
+    <table style="border:1px solid black;margin-left:auto;margin-right:auto;">
+        <tr>
+            <th>ID</th>
+            <th>BRAND</th>
+            <th>MODEL</th>
+        </tr>
+        <?php
+        $host = "mysql"; # here it's important to put the variables out of new mysqli line below:
+        $dbname = "instruments";
+        $username = "root";
+        $password = "DB_w31coMe!";
+
+        $mysqli = new mysqli($host, $username, $password, $dbname);
+        $result = $mysqli->query("SELECT * FROM guitars");
+        foreach ($result as $row) {
+            echo "<tr><td>{$row['id']}</td><td>{$row['brand']}</td><td>{$row['model']}</td></tr>";
+        }
+        ?>
+    </table>
+    <?php
+    phpinfo();
+    ?>
+</body>
+
+</html>
 
 
