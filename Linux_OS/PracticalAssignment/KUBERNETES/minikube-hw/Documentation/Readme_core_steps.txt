@@ -49,7 +49,7 @@ $ docker ps --format '{{.Names}}'
 in a terminal. Copy the output that mentions the word “mysql”. Then, we will perform this sequence of commands to initialize our dataset:
 Or alternatively, check with command: docker container ls -a
 
-Start container (mysql) and connect to it:
+Start container (mysql, can be done by docker-compose up and using another terminal) and connect to it:
     docker exec -ti  minikube-hw-mysql-1 /bin/bash
     or docker exec -ti  minikube-hw-mysql-1 bash
 
