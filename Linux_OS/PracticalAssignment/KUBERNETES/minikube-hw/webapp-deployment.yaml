@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: alexandrganitev/mifiib23ag:ganitev2
+        image: httpd #alexandrganitev/mifiib23ag:ganitev2
         ports:
         - containerPort: 80
         env:
