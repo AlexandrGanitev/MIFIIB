@@ -14,7 +14,7 @@
             <th>MODEL</th>
         </tr>
         <?php
-        $mysqli = new mysqli("db26", root, admin, "instruments");
+        $mysqli = new mysqli("db26", "root", "admin", "instruments");
         $result = $mysqli->query("SELECT * FROM guitars");
         foreach ($result as $row) {
             echo "<tr><td>{$row['id']}</td><td>{$row['brand']}</td><td>{$row['model']}</td></tr>";
