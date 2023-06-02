@@ -14,7 +14,7 @@ services:
       - '3306:3306'
     restart: 'always'
   php-apache-server:
-    image: 'alexandrganitev/mifiib23ag:ganitev2'
+    image: httpd #'alexandrganitev/mifiib23ag:ganitev2'
     container_name: php-apache-m26
     ports:
       - '8080:80'
