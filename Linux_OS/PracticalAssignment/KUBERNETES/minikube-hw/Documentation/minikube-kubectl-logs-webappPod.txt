@@ -1,0 +1,31 @@
+alexandrganitev@Alexandrs-MBP minikube-hw % minikube kubectl logs webapp-deployment-575c58b769-txh9k
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 10.244.1.3. Set the 'ServerName' directive globally to suppress this message
+AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 10.244.1.3. Set the 'ServerName' directive globally to suppress this message
+[Sat Jun 03 12:48:49.483374 2023] [mpm_prefork:notice] [pid 1] AH00163: Apache/2.4.56 (Debian) PHP/8.1.19 configured -- resuming normal operations
+[Sat Jun 03 12:48:49.483454 2023] [core:notice] [pid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+[Sat Jun 03 13:07:24.613255 2023] [autoindex:error] [pid 17] [client 192.168.49.2:30403] AH01276: Cannot serve directory /var/www/html/: No matching DirectoryIndex (index.php,index.html) found, and server-generated directory index forbidden by Options directive
+192.168.49.2 - - [03/Jun/2023:13:07:24 +0000] "GET / HTTP/1.1" 403 494 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+192.168.49.2 - - [03/Jun/2023:13:07:24 +0000] "GET /favicon.ico HTTP/1.1" 404 490 "http://127.0.0.1:65000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+[Sat Jun 03 13:08:11.291146 2023] [autoindex:error] [pid 19] [client 192.168.49.2:29844] AH01276: Cannot serve directory /var/www/html/: No matching DirectoryIndex (index.php,index.html) found, and server-generated directory index forbidden by Options directive
+192.168.49.2 - - [03/Jun/2023:13:08:11 +0000] "GET / HTTP/1.1" 403 494 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+192.168.49.2 - - [03/Jun/2023:13:08:11 +0000] "GET /favicon.ico HTTP/1.1" 404 490 "http://127.0.0.1:65009/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+[Sat Jun 03 13:08:22.082857 2023] [autoindex:error] [pid 20] [client 192.168.49.2:59316] AH01276: Cannot serve directory /var/www/html/: No matching DirectoryIndex (index.php,index.html) found, and server-generated directory index forbidden by Options directive
+192.168.49.2 - - [03/Jun/2023:13:08:22 +0000] "GET / HTTP/1.1" 403 494 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+192.168.49.2 - - [03/Jun/2023:13:09:13 +0000] "-" 408 0 "-" "-"
+
+
+Connect to webserver Pod:
+    kubectl exec -ti webapp-deployment-cc5675b4d-rzdbj bash (здесь не docker exec, а kubectl exec !,
+    мы же находимся в контейнере/поде Кубернета)
+
+Uncommented the following part on the webserver:
+<Directory /srv/>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+</Directory>
+
+Restarting the apache2 service and checking it:
+    root@webapp-deployment-575c58b769-txh9k:/var/www/html# systemctl restart apache2.service
+    root@webapp-deployment-575c58b769-txh9k:/var/www/html# systemctl status apache2.service
+
