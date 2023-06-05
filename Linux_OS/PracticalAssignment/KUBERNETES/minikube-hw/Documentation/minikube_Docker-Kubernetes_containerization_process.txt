@@ -179,14 +179,15 @@ AH00558: apache2: Could not reliably determine the server's fully qualified doma
 Created the Public repository on Docker Hub - 23mifiibag, the old one mifiib23ag was deleted.
 Tagged my images and pushed them to the repository.
     example: docker tag <image id> user_docker/image_my
-    docker login (log in to Docker Hub with the right credentials), than Tag and Push the images to Repository:
+    docker login (log in to Docker Hub with the right credentials!), than Tag and Push the images to Repository:
 
     alexandrganitev@Alexandrs-MBP minikube-hw % docker tag b1687f3d08c4 alexandrganitev/23mifiibag:minikube-hw-php-apache
     alexandrganitev@Alexandrs-MBP minikube-hw % docker push alexandrganitev/23mifiibag:minikube-hw-php-apache
 
     alexandrganitev@Alexandrs-MBP minikube-hw % docker tag 8f1cb6d99e4f alexandrganitev/23mifiibag:minikube-hw-mysql
     alexandrganitev@Alexandrs-MBP minikube-hw % docker push alexandrganitev/23mifiibag:minikube-hw-mysql
-Note: The Docker Hub shows 2 active tags (go to Advanced...), but they are not listed yet...
+Note: The Docker Hub shows 2 active tags (go to Advanced...), but they are not listed yet, it takes
+some time for the system to list them.
 
 Started the mysql container and checked the contents of the db, all the values are there:
 
@@ -282,6 +283,8 @@ index.php
 alexandrganitev@Alexandrs-MBP app % docker cp index.php 7934a4de2907:/var/www/html/index.php
                              Successfully copied 2.56kB to 7934a4de2907:/var/www/html/index.php
 
+The fix above didn't help, so I had to manually create and fill the index.php file in the root of the
+webapp-deployment-575c58b769-sjnnc.
 
 
 
@@ -467,8 +470,7 @@ AH00558: apache2: Could not reliably determine the server's fully qualified doma
 192.168.67.2 - - [02/Jun/2023:07:02:16 +0000] "GET /favicon.ico HTTP/1.1" 404 490 "http://127.0.0.1:55549/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
 192.168.67.2 - - [02/Jun/2023:07:03:08 +0000] "-" 408 0 "-" "-"
 
-
-Потом поглядел на access.log, httpd.conf, первый был пустой, второй не существует, то есть, в Докере мои образы работают, при использовании их в Кубернете, веб сервер не собирается правильно.
+Потом поглядел на access.log, httpd.conf, первый был пустой, второй не существует, то есть, в Докере мои образы работают, но при использовании их в Кубернете веб сервер не собирается правильно.
 
 
 Таким образом, я сейчас разбираюсь, как мне использовать официальный образ апача и как его связать с моей базой. Ведь оба Пода у меня работают, база mysql воссоздана/данные добавлены, ошибок нет.
@@ -477,6 +479,84 @@ AH00558: apache2: Could not reliably determine the server's fully qualified doma
 Надеюсь, смогу разобраться и сдать работу.
 
 
+Добавление: создаю новый Докер-образ, с тем так и не пошло…
+
+
 С уважением,
 Александр.
-________________________________________
+
+3 июня 2023 г.
+
+
+Александр Ганицев
+
+00:47
+@zkonst12 Доброй ночи Константин.
+Я удалил предыдущие образы и кластер с файлами прошлого Докер проекта. Пересоздал новые докер образы (2 вместо 3), один для последнего mysql, другой для php/apache 8.1, официальные образы, подправил index.php, набил базу инструментов. Докер собрался, база доступна, гитары выводит на экран.
+Сделал образы публичными на ГитХабе, создал новый кластер, добавил мои yaml файлы, создал поды. Оба сервера в контейнерах доступны через docker exec. Но, я опять получаю Forbidden. Где-то у меня неправильно создаётся вебсервер.
+
+
+Я попытался создать webapp1.yaml, как в материалах курса, то, что у меня тогда запустилось, но в этот раз страница не выдаёт ничего, пустая, что, как я понимаю, связано с тем, что она должна работать с mongo, так?
+
+
+root@webapp-deployment-575c58b769-v9rks:/var/log/apache2# ls -la
+total 12
+drwxrwxrwt 2 www-data www-data 4096 May 23 09:40 .
+drwxr-xr-x 1 root     root     4096 May 23 09:40 ..
+lrwxrwxrwx 1 www-data www-data   11 May 23 09:40 access.log -> /dev/stdout
+lrwxrwxrwx 1 www-data www-data   11 May 23 09:40 error.log -> /dev/stderr
+lrwxrwxrwx 1 www-data www-data   11 May 23 09:40 other_vhosts_access.log -> /dev/stdout
+
+
+Также я нашел вот такое объяснение моим мытарствам с открытием webapp-service:
+
+
+Does the service type need to be NodePort if we're tunneling to the ClusterIP?
+
+
+Technically, no need.
+
+
+I think it is a bug. IMHO, if the service type is NodePort, the tunnel port should be .spec.nodePort, but currently, the tunnel port is .spec.targetPort. I'll try to fix it later, if it is verified.
+
+
+Keep in mind, publishing-services-service-types
+
+
+NodePort: Exposes the Service on each Node's IP at a static port (the NodePort). A ClusterIP Service, to which the NodePort Service routes, is automatically created. You'll be able to contact the NodePort Service, from outside the cluster, by requesting :.
+
+
+Do I still need to run minikube service to connect to the service?
+
+
+Yes. As I mentioned before, due to the limited bridge network on MacOS, a tunnel is required to access the service inside Kubernetes cluster. And the tunnel is created by minikube service <service-name> --url
+
+
+If the --url is missing, this command will try to open default web browser to access http://<NodeIP>:<NodePort> if the service type is NodePort.
+
+
+In short, once the culsterIP type service is created, you can run minikube service <service-name> --url to create a tunnel, and this command will hang until you enter ctrl + c
+
+
+The available URL would be http://127.0.0.1:<PORT>, where the PORT can be found by ps -ef | grep ssh.
+
+
+I'll submit another PR to output this URL(http://127.0.0.1:)
+
+Сегодня
+
+
+Александр Ганицев
+
+00:32
+@zkonst12 @Lexas @julia.cherkas @vs.ryzhov
+Доброй ночи Константин и Алексей, есть небольшой прогресс.
+Я уже в третий раз пересоздал мои Докер контейнеры, загрузил образы на ДокерХаб, удалил и пересоздал кластер с подами. Проблема та же - Forbidden. Я понял, что в апаче не копируется index.php. Я его вручную воссоздал и увидел, что мой кластер не связывает базу с php.
+Мне очень хочется разобраться, я уже сильно отстал, нет смысла работать в остальных модулях и лекциях, когда здесь не выходит, это дело принципа.
+
+
+Можно было бы взять простенький пример в сети, который выводит строку (такое уже пробовал, все пошло), но я понимаю, что близок к разрешению проблемы и мои два (я перекомпоновал 3 контейнера из прошлого Докер проекта) контейнера работают в Докере, они тут в Кубере не желают работать...
+
+
+Помогите пожалуйста.
+______________________________________

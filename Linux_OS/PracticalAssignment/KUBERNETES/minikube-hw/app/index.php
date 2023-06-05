@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <h1  align= "center">Accoustic Instruments</h1>
+    <h1  align= "center">Acoustic Instruments</h1>
     <table style="border:1px solid black;margin-left:auto;margin-right:auto;">
         <tr>
             <th>ID</th>
@@ -14,7 +14,7 @@
             <th>MODEL</th>
         </tr>
         <?php
-        $host = "mysql";
+        $host = "mysql-service";
         $dbname = "instruments";
         $username = "root";
         $password = "DB_w31coMe!";

@@ -16,4 +16,24 @@ It was about 3 months, since I set up the docker with mysql and php. Adding some
         ->
             ('1', 'ADMIRA', 'ARTISTA'), ('2', 'TAYLOR', 'CE110'), ('3', 'MARTIN', 'D28'), ('4', 'OVATION', 'ADAMAS'), ('5', 'YAMAHA', 'FG800'), ('6', 'EPIPHONE', 'DR-100'), ('7', 'TAKAMINE', 'P3NY'), ('8', 'MARTIN', 'SC-13E'), ('9', 'MATON', 'SRS');
     mysql> exit (or ctrl-d)
+
+    If the DB instruments doesn't exits, copy and paste the following text:
+
+    CREATE DATABASE IF NOT EXISTS instruments;
+CREATE USER IF NOT EXISTS 'user'@'%'
+IDENTIFIED BY 'password';
+GRANT SELECT,UPDATE,INSERT ON instruments.* TO 'user'@'%';
+FLUSH PRIVILEGES;
+
+USE instruments;
+
+CREATE TABLE IF NOT EXISTS guitars (
+    id INT(10) NOT NULL,
+    brand VARCHAR(20) NOT NULL,
+    model VARCHAR(40) NOT NULL,
+    PRIMARY KEY (ID)
+  );
+
+Then do INSERT part...
+
 4. Check and refresh the page on http://localhost:8080, the data should be listed on it. PHP will pull the data from DB now.
