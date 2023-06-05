@@ -190,7 +190,7 @@ Note: The Docker Hub shows 2 active tags (go to Advanced...), but they are not l
 some time for the system to list them.
 
 Started the mysql container and checked the contents of the db, all the values are there:
-
+        LOGIN TO DATABASE:
 alexandrganitev@Alexandrs-MBP minikube-hw % docker exec -ti d41a62316956 bash (mysql container ID)
 bash-4.4# mysql -uroot -pDB_w31coMe!
 mysql: [Warning] Using a password on the command line interface can be insecure.
@@ -286,12 +286,20 @@ alexandrganitev@Alexandrs-MBP app % docker cp index.php 7934a4de2907:/var/www/ht
 The fix above didn't help, so I had to manually create and fill the index.php file in the root of the
 webapp-deployment-575c58b769-sjnnc.
 
+***********Близок к решнию:**********
+После того, как я вручную добавил таблицу и данные в mysql, скопировал содержимое файла index.php на
+вебсервер, у меня запустилось моё приложение в Кубернете. Осталось решить вопрос передачи пароля в
+index.php.
+
+Заметка: оба контейнера созданные этим путём - stateless, т.е. они не сохраняют данные, мне пришлось
+запускать контейнер, наполнять базу данными и добавлять index.php на вебсервер. Также я не смог разобраться
+с передачей пароля через переменные окружения. Тут нужно глубже копнуть.
 
 
 
-****************************
-----------------------------
-****************************
+**************************************************************************************************
+----------------------------Переписка-------------------------------------------------------------
+**************************************************************************************************
 Вопросы к менторам:
 
 @zkonst12 @Lexas @vs.ryzhov  

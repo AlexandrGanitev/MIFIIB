@@ -60,7 +60,7 @@ Database changed
 mysql> CREATE DATABASE IF NOT EXISTS instruments;
 Query OK, 1 row affected (0.01 sec)
 
-mysql> CREATE USER IF NOT EXISTS 'user'@'%'
+mysql> CREATE USER IF NOT EXISTS 'user@'%'
     -> IDENTIFIED BY 'password';
 Query OK, 0 rows affected (0.01 sec)
 
@@ -82,6 +82,9 @@ mysql> CREATE TABLE IF NOT EXISTS guitars (
     ->   );
 Query OK, 0 rows affected, 1 warning (0.02 sec)
             Inserting the data into the new database:
+
+Здесь важно после создания базы, вставить первую строку, а потом осталъные во избежание ошибок с добавлением.
+
 mysql> INSERT INTO guitars (id, brand, model) VALUES
     -> ('1', 'ADMIRA', 'ARTISTA');
 Query OK, 1 row affected (0.02 sec)
@@ -94,8 +97,28 @@ Records: 8  Duplicates: 0  Warnings: 0
 mysql> exit
     exit (to get out of bash
 
-B. Modifying index.php
+Example of my init.sql:
 
+CREATE DATABASE IF NOT EXISTS instruments;
+CREATE USER IF NOT EXISTS 'root'@'%'
+IDENTIFIED BY 'password';
+GRANT SELECT,UPDATE,INSERT ON instruments.* TO 'root'@'%';
+FLUSH PRIVILEGES;
+
+USE instruments;
+
+CREATE TABLE IF NOT EXISTS guitars (
+    id INT(10) NOT NULL,
+    brand VARCHAR(20) NOT NULL,
+    model VARCHAR(40) NOT NULL,
+    PRIMARY KEY (ID)
+  );
+
+B. Modifying index.php
+Нужно зайти на вебсервер:
+    kubectl exec -ti webapp-deployment-575c58b769-sjnnc bash
+установитъ nano/vim, вставить index.php, чтобы сайт работал.
+                index.php:
 <html lang="en">
 
 <head>
@@ -112,7 +135,7 @@ B. Modifying index.php
             <th>MODEL</th>
         </tr>
         <?php
-        $host = "mysql"; # here it's important to put the variables out of new mysqli line below:
+        $host = "mysql-service"; # here it's important to put the variables out of new mysqli line below:
         $dbname = "instruments";
         $username = "root";
         $password = "DB_w31coMe!";
