@@ -1,4 +1,2 @@
-Worked on some labs from the OWASP portal:
-
-https://owasp.org/www-project-juice-shop/
+Here I'm refreshing my programming skills to use them in performing the static and dynamic analisis.
 
