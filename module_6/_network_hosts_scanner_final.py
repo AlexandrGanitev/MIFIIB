@@ -1,3 +1,4 @@
+
 import os
 import argparse
 from typing import TextIO
@@ -93,7 +94,7 @@ with open("list_of_IP_addresses.txt", "a") as listIP :
 
 
 # ******** All works ********
-# Запуск сканера: python3 _network_hosts_scanner_final.py scan -i 192.168.1.1 -n 10
+# Запуск сканера: python3.10 _network_hosts_scanner_final.py scan -i 192.168.1.1 -n 10
 # или с начала пула существующих адресов:
 # python3 _network_hosts_scanner_final.py scan -i 192.168.1.110 -n 140
 # программа составляет список IP адресов, которые дают ответ по паттерну 'ttl'
