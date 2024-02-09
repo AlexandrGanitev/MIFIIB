@@ -1,0 +1,1 @@
+The new module added for SonarCube HW.
