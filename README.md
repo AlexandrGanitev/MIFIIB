@@ -2,7 +2,7 @@
 <img width="544" alt="image" src="https://github.com/AlexandrGanitev/MIFIIB/assets/122431529/af9abadf-c4bd-4d29-b507-ff043a59074f">
 
 
-My stack of technologies reveiced in this course:
+My stack of technologies received in this course:
 
 
 <img width="584" alt="image" src="https://github.com/AlexandrGanitev/MIFIIB/assets/122431529/b529084e-28f9-4ac7-b352-fb5d48c78b02">
