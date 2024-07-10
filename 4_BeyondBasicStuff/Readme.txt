@@ -1,0 +1,1 @@
+Added the new readme.txt file to regenerate the token.
